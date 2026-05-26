@@ -59,10 +59,10 @@ skills --version
 
 ```bash
 # 1. deep-research (리서치 보고서, 인용 레지스트리, counter-review)
-npx -y skills add https://github.com/daymade/claude-skill-deep-research --yes --global
+npx -y skills add "https://github.com/daymade/claude-code-skills/tree/main/deep-research" --yes --global
 
 # 2. benchmarking (Competitive Profile Matrix, Gap Analysis)
-npx -y skills add https://github.com/melodic-software/claude-skills-benchmarking --yes --global
+npx -y skills add "https://github.com/melodic-software/claude-code-plugins/tree/main/plugins/business-analysis/skills/benchmarking" --yes --global
 
 # 3. product-management-workflows (PRD, SWOT, 로드맵)
 npx -y skills add "https://github.com/zhizhunbao/workbuddy/tree/main/plugins/marketplaces/cb_teams_marketplace/plugins/product-management/skills/product-management-workflows" --yes --global

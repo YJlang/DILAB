@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* DILAB v2 디자인 토큰 — 인디고 + 머스타드 + Pretendard, 라이트 모드 전용 */
+:root {
+  --color-bg: #FAFAF9;          /* zinc-50 */
+  --color-card: #FFFFFF;
+  --color-ink: #0F172A;          /* zinc-900 */
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 다크모드 자동 적용 제거 — DILAB MVP 는 라이트 모드 전용.
+   다크모드 지원 필요 시 별도 toggle 로 재도입. */

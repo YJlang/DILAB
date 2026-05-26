@@ -50,11 +50,12 @@ C:\dilab\
 
 | 단계 | 상태 | 산출물 |
 |---|---|---|
-| 1. 싱클리 벤치마킹 리서치 | **완료** (2026-05-26) | `benchmark/syncly-benchmark.md` |
-| 2. DILAB MVP PRD 작성 | 다음 | `docs/prd/` (예정) |
-| 3. 기능 우선순위(P0/P1/P2) 확정 | 다음 | PRD 내 포함 |
-| 4. 오현 학생과 분담 | 다음 | 별도 협의 |
-| 5. MVP 구현 | 향후 | `src/` (예정) |
+| 1. 싱클리 벤치마킹 리서치 | **완료** (2026-05-26) | `benchmark/syncly-benchmark.md` (+ 부록 D 2026-05-26 추가) |
+| 2. DILAB MVP PRD 작성 | **v0.1 초안 완료** (2026-05-26) — 교수님/오현/협력사 대표 검토 대기 | `docs/prd/dilab-mvp-prd.md` |
+| 3. 기능 우선순위(P0/P1/P2) 확정 | PRD v0.1 에 매핑 완료 — Open Questions 해소 후 v1.0 으로 승급 예정 | PRD 섹션 5 |
+| 4. 기술 스택 ADR (M1) | 다음 — 2026-06-10 ~ 06-23 예정 | `docs/research/tech-stack-decision.md` (예정) |
+| 5. 오현 학생과 분담 | PRD 검토 단계에서 정리 | 별도 협의 |
+| 6. MVP 구현 (M2~M7) | 향후 — 2026-06-24 ~ 11-15 | `src/` (예정) |
 
 ## 5. Claude Code 협업 컨벤션
 
