@@ -7,6 +7,15 @@ function getClient(): SupabaseClient {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) {
+    const envKeys = Object.keys(process.env).filter((k) =>
+      k.startsWith("NEXT_PUBLIC_") || k === "AI_WORKER_URL",
+    );
+    console.error("supabase env missing", {
+      hasUrl: !!url,
+      hasKey: !!key,
+      visibleKeys: envKeys,
+      totalEnvCount: Object.keys(process.env).length,
+    });
     throw new Error(
       "NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY required at runtime",
     );
