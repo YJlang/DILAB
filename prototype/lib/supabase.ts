@@ -4,21 +4,12 @@ let _client: SupabaseClient | null = null;
 
 function getClient(): SupabaseClient {
   if (_client) return _client;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  // NEXT_PUBLIC_ 접두사 제거 — Next.js 가 build 시 inline 하지 않도록.
+  // server-only 사용이므로 client bundle 진출 불필요. Cloudflare runtime vars 가 즉시 적용됨.
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY;
   if (!url || !key) {
-    const envKeys = Object.keys(process.env).filter((k) =>
-      k.startsWith("NEXT_PUBLIC_") || k === "AI_WORKER_URL",
-    );
-    console.error("supabase env missing", {
-      hasUrl: !!url,
-      hasKey: !!key,
-      visibleKeys: envKeys,
-      totalEnvCount: Object.keys(process.env).length,
-    });
-    throw new Error(
-      "NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY required at runtime",
-    );
+    throw new Error("SUPABASE_URL / SUPABASE_ANON_KEY required at runtime");
   }
   _client = createClient(url, key, { auth: { persistSession: false } });
   return _client;
