@@ -9,7 +9,7 @@
 import { NextResponse } from "next/server";
 
 const AI_WORKER =
-  process.env.NEXT_PUBLIC_AI_WORKER_URL ?? "http://127.0.0.1:8000";
+  process.env.AI_WORKER_URL ?? "http://127.0.0.1:8000";
 
 // Vercel 등 서버리스 timeout 보호 (개발은 무관)
 export const maxDuration = 300;

@@ -5,7 +5,6 @@ type Stage = {
 };
 
 type StageData = {
-  key: string;
   n: number;
   positive_pct: number;
 };

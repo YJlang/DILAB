@@ -5,7 +5,7 @@ import { InsightsPanel } from "@/components/InsightsPanel";
 export const dynamic = "force-dynamic";
 
 const AI_WORKER =
-  process.env.NEXT_PUBLIC_AI_WORKER_URL ?? "http://127.0.0.1:8000";
+  process.env.AI_WORKER_URL ?? "http://127.0.0.1:8000";
 
 type Snapshot = {
   id: string;
