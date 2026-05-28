@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "clean": "node -e \"const fs=require('fs');for(const d of ['.next','.open-next']) fs.rmSync(d,{recursive:true,force:true})\"",
-    "deploy": "npm run clean && opennextjs-cloudflare build && wrangler deploy"
+    "smoke": "node -e \"const u='https://dilab.sean111400.workers.dev';const paths=['/','/dashboard','/ask','/topics','/products/anua-heartleaf-77'];(async()=>{await new Promise(r=>setTimeout(r,2000));for(let i=0;i<2;i++){for(const p of paths){try{const r=await fetch(u+p);process.stdout.write(r.status===200?'.':'!')}catch{process.stdout.write('x')}}}console.log(' smoke done')})()\"",
+    "deploy": "npm run clean && opennextjs-cloudflare build && wrangler deploy && npm run smoke"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
