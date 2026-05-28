@@ -125,12 +125,13 @@ export function AnalyzeForm() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder='제품명 입력 — 예: "닥터지 레드 블레미쉬 크림"'
           disabled={loading}
-          className="flex-1 px-4 py-3 text-sm rounded-md border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:bg-zinc-50"
+          aria-label="분석할 제품명 입력"
+          className="flex-1 px-4 py-3 text-sm rounded-md border border-zinc-200 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:bg-zinc-50"
         />
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="px-5 py-3 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300 hover:bg-indigo-700"
+          className="px-5 py-3 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
           {loading ? "분석 중…" : "분석 시작 ▶"}
         </button>

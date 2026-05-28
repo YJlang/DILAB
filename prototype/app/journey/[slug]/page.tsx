@@ -148,7 +148,7 @@ function StageDetail({
         <span className="text-xs text-zinc-500">— {chunks.length}건</span>
       </div>
       {chunks.length === 0 ? (
-        <p className="text-sm text-zinc-400 italic">이 단계는 비어 있어요.</p>
+        <p className="text-sm text-zinc-500 italic">이 단계는 비어 있어요.</p>
       ) : (
         <div className="space-y-2.5 max-h-80 overflow-auto">
           {chunks.slice(0, 8).map((c) => (
@@ -168,7 +168,7 @@ function StageDetail({
                   {c.source_type === "expert" ? "전문가" : "사용자"}
                 </span>
                 <span className="text-zinc-500">{c.author ?? "익명"}</span>
-                <span className="text-zinc-400 ml-auto">
+                <span className="text-zinc-500 ml-auto">
                   conf {c.confidence.toFixed(2)}
                 </span>
               </div>
@@ -178,7 +178,7 @@ function StageDetail({
             </div>
           ))}
           {chunks.length > 8 && (
-            <p className="text-xs text-zinc-400 text-center pt-1">
+            <p className="text-xs text-zinc-500 text-center pt-1">
               + {chunks.length - 8}건 더 있음
             </p>
           )}

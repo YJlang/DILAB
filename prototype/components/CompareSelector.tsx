@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function CompareSelector({
-  currentSlug,
+  productSlug,
   others,
 }: {
-  currentSlug: string;
+  productSlug: string;
   others: Array<{ slug: string; name: string }>;
 }) {
   const router = useRouter();
@@ -14,12 +14,12 @@ export function CompareSelector({
 
   function go() {
     if (!other) return;
-    router.push(`/compare/${currentSlug}/${other}`);
+    router.push(`/compare/${productSlug}/${other}`);
   }
 
   if (others.length === 0) {
     return (
-      <span className="text-xs text-zinc-400">
+      <span className="text-xs text-zinc-500">
         비교할 다른 제품이 아직 없어요
       </span>
     );
@@ -30,7 +30,8 @@ export function CompareSelector({
       <select
         value={other}
         onChange={(e) => setOther(e.target.value)}
-        className="px-3 py-1.5 text-sm rounded-md border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200"
+        aria-label="비교할 다른 제품 선택"
+        className="px-3 py-1.5 text-sm rounded-md border border-zinc-200 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
       >
         <option value="">⚖️ 다른 제품과 비교…</option>
         {others.map((o) => (
@@ -42,7 +43,7 @@ export function CompareSelector({
       <button
         onClick={go}
         disabled={!other}
-        className="px-3 py-1.5 text-sm font-medium rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-zinc-300"
+        className="px-3 py-1.5 text-sm font-medium rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
       >
         비교 ▶
       </button>

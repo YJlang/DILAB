@@ -89,7 +89,7 @@ export default async function ComparePage({
         <div className="text-xs text-zinc-500 mb-2">⚖️ 데이터 기반 경쟁 비교</div>
         <h1 className="text-xl font-bold tracking-tight leading-relaxed">
           <span className="text-indigo-700">{data.a.name}</span>
-          <span className="mx-3 text-zinc-400">vs</span>
+          <span className="mx-3 text-zinc-500">vs</span>
           <span className="text-amber-700">{data.b.name}</span>
         </h1>
         <p className="text-xs text-zinc-500 mt-2">
@@ -142,7 +142,7 @@ export default async function ComparePage({
                       <span className="text-amber-700 font-bold">B</span>
                     )}
                     {d.winner === "tie" && (
-                      <span className="text-zinc-400">=</span>
+                      <span className="text-zinc-500" aria-label="동률">=</span>
                     )}
                   </td>
                 </tr>

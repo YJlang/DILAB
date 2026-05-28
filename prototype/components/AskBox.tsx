@@ -60,12 +60,13 @@ export function AskBox({
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder='예: "민감성 피부에 괜찮나요?"'
-          className="flex-1 px-3 py-2 text-sm rounded-md border border-zinc-200 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          aria-label="질문 입력"
+          className="flex-1 px-3 py-2 text-sm rounded-md border border-zinc-200 bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         />
         <button
           onClick={send}
           disabled={loading || !query.trim()}
-          className="px-4 py-2 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300"
+          className="px-4 py-2 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
           {loading ? "분석 중…" : "물어보기"}
         </button>

@@ -83,18 +83,22 @@ export default async function ProductPage({
         <div className="flex flex-wrap gap-2 items-center">
           <a
             href={`/ask?product=${slug}`}
-            className="text-sm px-3 py-1.5 rounded-md border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 font-medium"
+            className="text-sm px-3 py-1.5 rounded-md border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
             ⚡ Ask
           </a>
           <a
             href={`/journey/${slug}`}
-            className="text-sm px-3 py-1.5 rounded-md border border-amber-200 bg-amber-50/50 hover:bg-amber-100 text-amber-700 font-medium"
+            className="text-sm px-3 py-1.5 rounded-md border border-amber-200 bg-amber-50/50 hover:bg-amber-100 text-amber-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
           >
             🗺️ 여정
           </a>
-          <CompareSelector currentSlug={slug} others={otherProducts} />
-          <button className="text-sm px-3 py-1.5 rounded-md border border-zinc-200 hover:bg-zinc-50">
+          <CompareSelector productSlug={slug} others={otherProducts} />
+          <button
+            type="button"
+            aria-label="이 제품 저장"
+            className="text-sm px-3 py-1.5 rounded-md border border-zinc-200 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          >
             🤍 저장
           </button>
         </div>

@@ -26,16 +26,16 @@ export function InsightsPanel({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <StrengthCard
           title={`💎 ${aName} 강점`}
           items={aStrengths}
-          tone="indigo"
+          tone="primary"
         />
         <StrengthCard
           title={`⚖️ ${bName} 강점`}
           items={bStrengths}
-          tone="amber"
+          tone="accent"
         />
       </div>
 
@@ -60,6 +60,11 @@ export function InsightsPanel({
   );
 }
 
+const TONE_CLASS: Record<"primary" | "accent", string> = {
+  primary: "bg-indigo-50/40 border-indigo-100",
+  accent: "bg-amber-50/40 border-amber-100",
+};
+
 function StrengthCard({
   title,
   items,
@@ -67,14 +72,10 @@ function StrengthCard({
 }: {
   title: string;
   items: string[];
-  tone: "indigo" | "amber";
+  tone: "primary" | "accent";
 }) {
-  const cls =
-    tone === "indigo"
-      ? "bg-indigo-50/40 border-indigo-100"
-      : "bg-amber-50/40 border-amber-100";
   return (
-    <div className={`rounded-lg border ${cls} p-4`}>
+    <div className={`rounded-lg border ${TONE_CLASS[tone]} p-4`}>
       <div className="text-xs font-semibold mb-2 tracking-wide">{title}</div>
       <ul className="space-y-1.5 text-sm text-zinc-700">
         {items.map((s, i) => (
