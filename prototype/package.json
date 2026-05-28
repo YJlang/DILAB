@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "opennextjs-cloudflare build && wrangler deploy"
+    "clean": "node -e \"const fs=require('fs');for(const d of ['.next','.open-next']) fs.rmSync(d,{recursive:true,force:true})\"",
+    "deploy": "npm run clean && opennextjs-cloudflare build && wrangler deploy"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
