@@ -4,8 +4,8 @@
 
 ## 한눈에 보기
 
-- **상태**: 풀스택 MVP + **Cloudflare Workers 배포 완료** (2026-05-28). S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 + OpenNext 어댑터.
-- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7). 단 분석·Ask 는 PC 의 ai-worker + cloudflared 가 살아있을 때만 동작 — [`docs/OPERATIONS.md`](docs/OPERATIONS.md) 참조.
+- **상태**: 풀스택 MVP + **Cloudflare + Modal + Supabase 하이브리드 24/7 운영** (2026-05-28, M6 완료). S1~S6 + 자동 분석 + RAG Ask + Modal serverless 분석 큐.
+- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7, 모든 기능 작동, **사용자 노트북 무관**). 자세한 운영 그림: [`docs/DEPLOYMENT_PLAN.md`](docs/DEPLOYMENT_PLAN.md) + [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 - **포지셔닝**: ***"양으로 답하는 싱클리, 질로 답하는 DILAB"*** — 모든 답변·점수에 출처 chunk 추적
 - **언어**: 한국어 (코드·기술명은 영문 유지)
 

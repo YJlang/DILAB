@@ -2,10 +2,10 @@
 
 > 다른 환경 / 다른 세션의 **AI agent** (Claude Code 등) 가 즉시 이 프로젝트를 이어받을 수 있도록 작성한 인수인계 문서. **사람이 보기 좋게 작성하지 않았음** — agent 가 *최단 시간에 컨텍스트 복구* 하는 게 목적.
 
-- **AS_OF**: 2026-05-28
-- **상태**: 풀스택 MVP + **Cloudflare Workers 배포 완료**. S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 + OpenNext 어댑터 운영.
+- **AS_OF**: 2026-05-28 (Phase 1·2·3 완료)
+- **상태**: 풀스택 MVP + **Cloudflare + Modal + Supabase 하이브리드 24/7 운영**. ai-worker / cloudflared 운영 폐기, 노트북 0시간, 월 $0.
 - **저장소**: `https://github.com/YJlang/DILAB` (main 브랜치)
-- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7) — 단 분석·Ask 는 PC 의 ai-worker + cloudflared 가 살아있을 때만 동작 ([OPERATIONS.md](OPERATIONS.md) 참조)
+- **데모 URL**: `https://dilab.sean111400.workers.dev` — **모든 기능 24/7 정상 작동** (Ask·조회·분석·비교). 자세한 그림: [OPERATIONS.md](OPERATIONS.md), [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).
 
 ---
 
@@ -211,6 +211,7 @@ npm run deploy   # = opennextjs-cloudflare build && wrangler deploy
 | M3 | B2 BERTopic + B3 분류·감성 + B4 여정 매핑 + B5 RAG + 5축 ratings | `src/topics`, `src/analysis`, `src/rag`, `src/ratings` |
 | M4 | 자동 분석 (`/analyze`) + S6 비교 (`/compare`) + S1~S6 풀 UI + slug 개선 | `prototype/app/*`, `prototype/components/*` |
 | M5 | Cloudflare Workers 배포 (OpenNext) + cloudflared Quick Tunnel + Supabase lazy proxy + observability MCP | `prototype/wrangler.jsonc`, `prototype/open-next.config.ts`, `prototype/lib/supabase.ts`, [`docs/OPERATIONS.md`](OPERATIONS.md) |
+| M6 | **Phase 1·2·3** — Cloudflare Workers AI 임베딩 (BGE-M3 / 1024d / 무료) + Modal serverless 분석 큐 + ai-worker 운영 폐기. 노트북 0시간, 월 $0. | `prototype/lib/{cf-env,embeddings,rag}.ts`, `prototype/app/api/{ask,analyze,analyze/status}/route.ts`, `modal_app/analyze.py`, `analysis_jobs` 테이블, [`docs/DEPLOYMENT_PLAN.md`](DEPLOYMENT_PLAN.md) |
 
 ---
 
@@ -242,10 +243,13 @@ npm run deploy   # = opennextjs-cloudflare build && wrangler deploy
 | 배포 후 `/products` 등 500, "supabaseUrl is required" | `lib/supabase.ts` 가 module 평가 시점에 `createClient(undefined,...)` → "Collecting page data" 가 throw | Lazy Proxy 패턴 적용 (`prototype/lib/supabase.ts` 참조) |
 | Cloudflare runtime vars 가 안 잡힘, build 시 inline 됨 | `NEXT_PUBLIC_*` 접두사가 DefinePlugin 으로 build-time 박힘 | 접두사 제거 + server-only 사용 |
 | `wrangler deploy` 마다 dashboard 환경변수 삭제 | `wrangler.jsonc` 의 `vars` 가 source-of-truth | `keep_vars: true` + 모든 변수는 `wrangler.jsonc` 에 박기 |
-| 사이트에서 "ai-worker 530" / `error code: 1016` | Worker 가 옛 tunnel URL 가리킴 (cloudflared 재기동마다 URL 변동) | `wrangler.jsonc` 의 `AI_WORKER_URL` 갱신 → `npm run deploy` |
-| 배포 후 `ChunkLoadError` 500 | `.open-next/` 빌드가 stale 한 채 `wrangler deploy` 만 돌림 | `npm run deploy` (= build + deploy 묶음) |
-| `/api/analyze` 만 항상 502 | Cloudflare Workers 30초 hard timeout < 60~90초 분석 | (deferred) async queue + polling |
+| (legacy M5) 사이트에서 "ai-worker 530" / `error code: 1016` | Worker 가 옛 tunnel URL 가리킴 | M6 으로 폐기 — Modal endpoint 가 영구 URL |
+| 배포 후 `ChunkLoadError` 500 | `.open-next/` 빌드가 stale 한 채 wrangler deploy | M6: `npm run deploy` 가 매번 `.next` + `.open-next` clean 강제 — 영구 fix |
+| (legacy) `/api/analyze` 502 | Cloudflare Workers 30초 hard timeout < 60~90초 분석 | M6: Modal fire-and-forget 큐 + polling 으로 해결 |
 | `wrangler deploy` 가 `CLOUDFLARE_API_TOKEN` 요구 | 비대화형 셸은 OAuth cache 못 읽음 | 사람이 직접 PowerShell 창에서 실행, 또는 `wrangler login` 한 번 |
+| 모든 SSR 페이지 500 + `TypeError: components.ComponentMod.handler is not a function` | **Server Component 에서 `cfEnv()` (sync `getCloudflareContext`) 호출** → RSC eval 시 throw → worker bundle handler registry 전체 깨짐 | Server Component 는 `process.env` 만 사용. `cfEnv()` 는 route handler 안에서만. AI binding 같은 객체는 `lib/embeddings.ts` helper 뒤로 |
+| Modal `add_local_dir` 실패 / import 실패 | `modal deploy` 의 path 가 *실행 디렉토리 기준* | 항상 `cd C:\dilab` 후 `modal deploy modal_app/analyze.py` |
+| Modal deploy 중 `'cp949' codec` unicode 에러 | PowerShell 콘솔이 ✓ 표시 못함 (단 deploy 자체는 성공) | `chcp 65001; $env:PYTHONIOENCODING="utf-8"` 후 deploy 재실행 |
 
 ---
 

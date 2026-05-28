@@ -64,12 +64,13 @@ C:\dilab\
 | 4. 기술 스택 ADR (M1) | **완료** | `docs/research/tech-stack-decision.md` |
 | 5. MVP 풀스택 구현 (M2~M4) | **완료** (2026-05-27) — S1~S6 + 자동 분석 파이프라인 | `prototype/`, `ai-worker/` |
 | 6. Cloudflare 배포 운영 (M5) | **완료** (2026-05-28) — Workers + OpenNext + cloudflared Quick Tunnel | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
-| 7. 데이터 확장 + 두 번째 도메인 | 다음 | (예정) |
+| 7. Cloudflare AI + Modal 하이브리드 (M6) | **완료** (2026-05-28) — BGE-M3 Workers AI + Modal 분석 큐. ai-worker 운영 폐기. 노트북 0시간, 월 $0. | [`docs/DEPLOYMENT_PLAN.md`](docs/DEPLOYMENT_PLAN.md), `modal_app/` |
+| 8. 데이터 확장 + 두 번째 도메인 | 다음 | (예정) |
 
-### 운영 정보 (AS_OF 2026-05-28)
-- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7)
-- **AI 기능**: PC 의 ai-worker + cloudflared 가 살아있을 때만 (분석·Ask). 정적 페이지는 항상 OK.
-- **재기동·배포 절차**: [`docs/OPERATIONS.md`](docs/OPERATIONS.md) — 새 세션 시작 시 반드시 먼저 읽기.
+### 운영 정보 (AS_OF 2026-05-28, M6 완료)
+- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7, **사용자 노트북 무관**)
+- **모든 기능 작동**: Ask·조회·분석·비교. ai-worker / cloudflared 운영 폐기.
+- **재기동·배포 절차**: [`docs/OPERATIONS.md`](docs/OPERATIONS.md), [`docs/DEPLOYMENT_PLAN.md`](docs/DEPLOYMENT_PLAN.md). 새 세션 시작 시 반드시 먼저 읽기.
 
 ## 5. Claude Code 협업 컨벤션
 

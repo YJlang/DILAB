@@ -150,9 +150,19 @@
 - `prototype/lib/embeddings.ts` (신규) — `embedQuery(text): Promise<number[]>`
 - `docs/AGENT_HANDOFF.md` — 임베딩 layer 변경 기록
 
-### Phase 2 — Modal 분석 큐 구축 [3~5일]
+### Phase 2 — Modal 분석 큐 구축 ✅ **완료** (2026-05-28)
 
 **목표**: 사이트의 `/analyze` 폼이 Modal 함수를 fire-and-forget 으로 트리거 → 백그라운드 처리 → 클라이언트 polling 으로 진행률 표시.
+
+**검증 결과 (2026-05-28 04:59 UTC)**:
+- `/api/analyze` POST → `job_id` 반환 (HTTP 200)
+- `/api/analyze/status/[job_id]` polling → `pending → running → done` 전이 정상, 진행률 메시지 표시
+- 신제품 "라네즈 워터뱅크 블루 히알루로닉 크림" 실제 분석 → **114초 done**, 45 documents 수집·임베딩·라벨링
+- 새 제품 페이지 `/products/laneige-cream-dac313` 즉시 200 (3.3초)
+- Modal `/compare` endpoint — cold start ~16~17s, 작동 OK (warm 유지는 비용 감수 후 옵션)
+- `/compare`, `/products/...` 등 Server Component 에서 `cfEnv()` (sync `getCloudflareContext`) 호출 시 worker bundle 전체가 깨지는 함정 발견 → `process.env` 사용으로 fix (`fix(rsc)` commit)
+- `npm run deploy` 가 매번 `.next` + `.open-next` 강제 정리하도록 영구 fix
+- 산출물: `modal_app/analyze.py` (trigger + compare + analyze_product_task 3 함수), `analysis_jobs` 테이블, `/api/analyze` 재작성, `/api/analyze/status/[job_id]` 신규, AnalyzeForm polling UI, Modal Secret 12 keys (`dilab-env`)
 
 #### 2.1 Modal 가입 + 토큰
 사용자 액션: `https://modal.com` 가입 → `pip install modal` → `modal token new` (브라우저 OAuth).
@@ -223,9 +233,15 @@ BGE-M3 가중치는 첫 호출에서 다운로드 후 `/cache` volume 에 저장
 - `prototype/app/api/analyze/status/[job_id]/route.ts` (신규)
 - `prototype/components/AnalyzeForm.tsx` (polling UI)
 
-### Phase 3 — ai-worker + cloudflared 폐기 [1일]
+### Phase 3 — ai-worker + cloudflared 폐기 ✅ **완료** (2026-05-28)
 
 **목표**: 더 이상 사용하지 않는 ai-worker 와 cloudflared 운영 폐기.
+
+**결과**:
+- `ai-worker/` 폴더는 *Modal 함수의 source* 로 유지 (`add_local_dir`). README 상단에 *legacy* 표기 추가.
+- `.run/ai-worker.log` / `.run/cloudflared.log` 는 git untrack (`.gitignore` 패턴 그대로).
+- `OPERATIONS.md` 완전 재작성 — 새 운영 그림(Modal + Cloudflare 24/7) + 알려진 함정 7종 + legacy 섹션 archive.
+- `AGENT_HANDOFF.md`, `prototype/AGENTS.md`, `README.md`, `CLAUDE.md` 도 새 운영 모델 반영.
 
 #### 3.1 백업
 - `ai-worker/` 디렉토리를 *삭제하지 않고* `legacy-ai-worker/` 로 이름 변경.
@@ -325,3 +341,4 @@ BGE-M3 가중치는 첫 호출에서 다운로드 후 `/cache` volume 에 저장
 |---|---|
 | 2026-05-28 | v1.0 — 초안. Cloudflare 임베딩 + Modal 분석 큐 + ai-worker 폐기 그림 확정. |
 | 2026-05-28 | v1.1 — Phase 1 완료. BGE-M3 차원 1024d 확정 (마이그레이션 불필요), /api/ask 가 ai-worker 없이 Cloudflare 만으로 작동 검증됨. Phase 2 (Modal) 진행 중. |
+| 2026-05-28 | v1.2 — Phase 2·3 완료. Modal 분석 큐 + compare endpoint, AnalyzeForm polling, analysis_jobs 테이블. 신제품 실분석 114초 done. ai-worker / cloudflared 운영 폐기. 노트북 0시간 + 월 $0 데모 사이트 완성. 발견 함정: Server Component 의 sync `getCloudflareContext()` 호출이 worker bundle 깨뜨림 → process.env 사용으로 우회. |

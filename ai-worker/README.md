@@ -1,5 +1,12 @@
 # DILAB AI Worker
 
+> ⚠️ **2026-05-28 이후 — 운영 모드 변경**:
+> - 이 폴더는 더 이상 **uvicorn 으로 24/7 실행하지 않습니다**. [DEPLOYMENT_PLAN.md](../docs/DEPLOYMENT_PLAN.md) Phase 1·2 로 옮겨졌습니다.
+> - `src/` 의 코드 (`ingestion/`, `analysis/`, `topics/`, `ratings/`, `compare/` 등) 는 **Modal 함수의 source** 로 그대로 사용됩니다. [`modal_app/analyze.py`](../modal_app/analyze.py) 의 `add_local_dir("./ai-worker/src", ...)` 참조.
+> - `src/rag/`, `src/embeddings/` 의 로직은 **Cloudflare Workers 안의 [`prototype/lib/rag.ts`](../prototype/lib/rag.ts) 로 port** 되어 있습니다 (BGE-M3 → `@cf/baai/bge-m3` Workers AI binding).
+> - **로컬 `uvicorn` / `cloudflared tunnel` 띄울 필요 없음.** 사이트(https://dilab.sean111400.workers.dev) 가 노트북과 무관하게 24/7 작동합니다.
+> - 이 README 아래 절차는 **legacy 개발용**. 새로운 분석 파이프라인 개발 시는 Modal 함수 직접 수정 → `modal deploy`.
+
 Python 기반 AI 워커 — DILAB MVP 의 B1~B5 (임베딩·토픽·분류·감성·여정·RAG) 담당. Supabase 는 상태, 본 워커는 연산.
 
 ## 빠른 시작
