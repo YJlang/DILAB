@@ -8,10 +8,10 @@ export function SentimentBars({ counts }: { counts: Counts }) {
   const pct = (n: number) => Math.round((n / total) * 100);
 
   return (
-    <div className="space-y-2">
-      <Row label="😊 좋아요" pct={pct(counts.positive)} color="bg-indigo-500" />
-      <Row label="😐 그저그래요" pct={pct(counts.neutral)} color="bg-amber-400" />
-      <Row label="😣 아쉬워요" pct={pct(counts.negative)} color="bg-zinc-400" />
+    <div className="space-y-2" role="img" aria-label={`긍정 ${pct(counts.positive)}%, 중립 ${pct(counts.neutral)}%, 부정 ${pct(counts.negative)}%`}>
+      <Row label="😊 좋아요" pct={pct(counts.positive)} color="bg-emerald-500" />
+      <Row label="😐 그저그래요" pct={pct(counts.neutral)} color="bg-zinc-400" />
+      <Row label="😣 아쉬워요" pct={pct(counts.negative)} color="bg-rose-500" />
     </div>
   );
 }
@@ -19,11 +19,11 @@ export function SentimentBars({ counts }: { counts: Counts }) {
 function Row({ label, pct, color }: { label: string; pct: number; color: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="w-24 text-sm">{label}</span>
+      <span className="w-20 sm:w-24 shrink-0 text-sm">{label}</span>
       <div className="flex-1 h-5 bg-zinc-100 rounded-sm overflow-hidden">
         <div className={`h-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="w-10 text-right text-sm font-semibold tabular-nums">
+      <span className="w-10 shrink-0 text-right text-sm font-semibold tabular-nums">
         {pct}%
       </span>
     </div>

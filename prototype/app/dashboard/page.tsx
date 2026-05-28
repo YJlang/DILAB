@@ -125,21 +125,21 @@ export default async function DashboardPage({
               label="😊 좋아요"
               n={stats.sentiment_dist.positive}
               total={totalSent}
-              color="bg-indigo-500"
+              color="bg-emerald-500"
             />
             <div className="h-2" />
             <SentRow
               label="😐 그저그래요"
               n={stats.sentiment_dist.neutral}
               total={totalSent}
-              color="bg-amber-400"
+              color="bg-zinc-400"
             />
             <div className="h-2" />
             <SentRow
               label="😣 아쉬워요"
               n={stats.sentiment_dist.negative}
               total={totalSent}
-              color="bg-zinc-400"
+              color="bg-rose-500"
             />
           </div>
 

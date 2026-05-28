@@ -96,29 +96,33 @@ function TopicCard({
       </div>
 
       {/* 감성 mini bar */}
-      <div className="flex items-center gap-2 mb-3 text-xs">
+      <div
+        className="flex items-center gap-2 mb-3 text-xs"
+        role="img"
+        aria-label={`긍정 ${posPct}%, 중립 ${sentTotal > 0 ? Math.round((t.sentiment.neutral / sentTotal) * 100) : 0}%, 부정 ${sentTotal > 0 ? Math.round((t.sentiment.negative / sentTotal) * 100) : 0}%`}
+      >
         <span className="text-zinc-500">감성</span>
         <div className="flex-1 h-1.5 bg-zinc-100 rounded-sm overflow-hidden flex">
           <div
-            className="bg-indigo-500"
+            className="bg-emerald-500"
             style={{
               width: `${(t.sentiment.positive / Math.max(sentTotal, 1)) * 100}%`,
             }}
           />
           <div
-            className="bg-amber-400"
+            className="bg-zinc-400"
             style={{
               width: `${(t.sentiment.neutral / Math.max(sentTotal, 1)) * 100}%`,
             }}
           />
           <div
-            className="bg-zinc-400"
+            className="bg-rose-500"
             style={{
               width: `${(t.sentiment.negative / Math.max(sentTotal, 1)) * 100}%`,
             }}
           />
         </div>
-        <span className="text-indigo-600 font-semibold tabular-nums">
+        <span className="text-emerald-700 font-semibold tabular-nums">
           😊 {posPct}%
         </span>
       </div>

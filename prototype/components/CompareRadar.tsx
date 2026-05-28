@@ -22,7 +22,11 @@ export function CompareRadar({
   bLabel: string;
   height?: number;
 }) {
+  const summary = data
+    .map((d) => `${d.axis}: ${aLabel} ${d.a.toFixed(1)}, ${bLabel} ${d.b.toFixed(1)}`)
+    .join(" | ");
   return (
+    <div role="img" aria-label={`5축 비교 — ${summary}`}>
     <ResponsiveContainer width="100%" height={height}>
       <RechartsRadar data={data} cx="50%" cy="50%" outerRadius="70%">
         <PolarGrid strokeDasharray="2 3" stroke="#CBD5E1" />
@@ -55,5 +59,6 @@ export function CompareRadar({
         <Legend wrapperStyle={{ fontSize: 12 }} />
       </RechartsRadar>
     </ResponsiveContainer>
+    </div>
   );
 }

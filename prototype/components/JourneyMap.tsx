@@ -22,7 +22,7 @@ export function JourneyMap({
       <div className="flex items-baseline justify-between mb-4">
         <h2 className="text-base font-bold">🗺️ 사람들의 구매·사용 여정</h2>
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {sorted.map((s, i) => {
           const d = data[s.key];
           const isHighlight = s.key === "rebuy";

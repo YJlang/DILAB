@@ -17,7 +17,11 @@ export function RadarChart({
   data: AxisPoint[];
   height?: number;
 }) {
+  const summary = data
+    .map((d) => `${d.axis} ${d.product.toFixed(1)}점`)
+    .join(", ");
   return (
+    <div role="img" aria-label={`5축 점수: ${summary}`}>
     <ResponsiveContainer width="100%" height={height}>
       <RechartsRadar data={data} cx="50%" cy="50%" outerRadius="75%">
         <PolarGrid strokeDasharray="2 3" stroke="#CBD5E1" />
@@ -51,5 +55,6 @@ export function RadarChart({
         />
       </RechartsRadar>
     </ResponsiveContainer>
+    </div>
   );
 }
