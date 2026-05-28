@@ -4,6 +4,8 @@
 >
 > **AS_OF**: 2026-05-28
 > **현재 배포**: `https://dilab.sean111400.workers.dev` (Cloudflare Workers + OpenNext)
+>
+> ⚠️ **2026-05-28 이후**: [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md) 의 Phase 1 완료로 **Ask·조회 경로는 ai-worker 불필요**. `/analyze` 만 ai-worker (또는 Phase 2 후 Modal) 의존. 즉 **분석 시연 시에만** ai-worker + cloudflared 기동.
 
 ---
 

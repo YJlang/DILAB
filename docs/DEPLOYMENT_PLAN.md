@@ -112,9 +112,16 @@
 
 각 phase 는 **독립적으로 commit + 배포**. 이전 phase 가 안정될 때까지 다음 phase 미진행.
 
-### Phase 1 — Cloudflare 임베딩 도입 (Ask·조회 경로) [1~3일]
+### Phase 1 — Cloudflare 임베딩 도입 (Ask·조회 경로) ✅ **완료** (2026-05-28)
 
 **목표**: ai-worker 의 `/ask` 호출을 끊고, Cloudflare Workers 안에서 직접 BGE-M3 임베딩 + Supabase RPC + DeepSeek 호출.
+
+**검증 결과 (2026-05-28 02:50 UTC)**:
+- BGE-M3 차원: **1024d** (Cloudflare AI 응답 `length=1024`) — pgvector 마이그레이션 불필요
+- `/api/ask`: HTTP 200, latency 3.16~3.62s (DeepSeek 시간만)
+- ai-worker + cloudflared 모두 종료한 상태에서도 정상 작동 → Cloudflare 독립 작동 확정
+- 모든 SSR 페이지 (`/`, `/products/[slug]`, `/dashboard`, `/ask` 등) 200
+- 산출물: `lib/cf-env.ts`, `lib/embeddings.ts`, `lib/rag.ts`, `app/api/ask/route.ts` 재작성, `wrangler.jsonc` 의 `ai` binding + `DEEPSEEK_BASE_URL`/`LLM_MODEL` vars + `DEEPSEEK_API_KEY` secret
 
 #### 1.1 wrangler.jsonc 에 AI binding 추가
 ```jsonc
@@ -317,3 +324,4 @@ BGE-M3 가중치는 첫 호출에서 다운로드 후 `/cache` volume 에 저장
 | 일자 | 변경 |
 |---|---|
 | 2026-05-28 | v1.0 — 초안. Cloudflare 임베딩 + Modal 분석 큐 + ai-worker 폐기 그림 확정. |
+| 2026-05-28 | v1.1 — Phase 1 완료. BGE-M3 차원 1024d 확정 (마이그레이션 불필요), /api/ask 가 ai-worker 없이 Cloudflare 만으로 작동 검증됨. Phase 2 (Modal) 진행 중. |
