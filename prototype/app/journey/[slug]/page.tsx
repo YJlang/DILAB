@@ -34,17 +34,9 @@ export default async function JourneyPage({
   );
 
   return (
-    <main className="max-w-[1400px] mx-auto px-6 py-6">
+    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
-        <div className="flex items-center gap-3 mb-3">
-          <Link href="/" className="inline-flex items-center gap-2 hover:opacity-80">
-            <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-              D
-            </span>
-            <span className="text-lg font-bold tracking-tight">DILAB</span>
-          </Link>
-          <span className="text-xs text-zinc-500">🗺️ 사용자 여정 지도</span>
-        </div>
+        <div className="text-xs text-zinc-500 mb-2">🗺️ 사용자 여정 지도</div>
         <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
         <p className="text-sm text-zinc-500 mt-1">
           {product.brand} · 총 {totalChunks}건의 청크가 여정 단계에 매핑됨

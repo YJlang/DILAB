@@ -84,20 +84,9 @@ export default async function ComparePage({
   const bPosPct = totalPct(data.b.sentiment_dist);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-6 py-6">
+    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
-        <div className="flex items-center gap-3 mb-3">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 hover:opacity-80"
-          >
-            <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-              D
-            </span>
-            <span className="text-lg font-bold tracking-tight">DILAB</span>
-          </Link>
-          <span className="text-xs text-zinc-500">⚖️ 데이터 기반 경쟁 비교</span>
-        </div>
+        <div className="text-xs text-zinc-500 mb-2">⚖️ 데이터 기반 경쟁 비교</div>
         <h1 className="text-xl font-bold tracking-tight leading-relaxed">
           <span className="text-indigo-700">{data.a.name}</span>
           <span className="mx-3 text-zinc-400">vs</span>

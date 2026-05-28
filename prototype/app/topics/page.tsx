@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getTopicsWithChunks } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
@@ -21,20 +20,9 @@ export default async function TopicsPage({
   const total = topics.reduce((s, t) => s + t.doc_count, 0);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-6 py-6">
+    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
-        <div className="flex items-center gap-3 mb-3">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 hover:opacity-80"
-          >
-            <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-              D
-            </span>
-            <span className="text-lg font-bold tracking-tight">DILAB</span>
-          </Link>
-          <span className="text-xs text-zinc-500">🧩 토픽 탐색 (BERTopic)</span>
-        </div>
+        <div className="text-xs text-zinc-500 mb-2">🧩 토픽 탐색 (BERTopic)</div>
         <h1 className="text-2xl font-bold tracking-tight">
           🌿 화장품 — {topics.length}개 토픽 클러스터
         </h1>

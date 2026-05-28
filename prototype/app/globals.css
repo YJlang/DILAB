@@ -1,10 +1,20 @@
 @import "tailwindcss";
 
-/* DILAB v2 디자인 토큰 — 인디고 + 머스타드 + Pretendard, 라이트 모드 전용 */
+/* DILAB 디자인 토큰 — DESIGN.md §3 기준. 라이트 모드 전용. */
 :root {
   --color-bg: #FAFAF9;          /* zinc-50 */
   --color-card: #FFFFFF;
   --color-ink: #0F172A;          /* zinc-900 */
+  --color-ink-soft: #3F3F46;     /* zinc-700 — 보조 텍스트 */
+  --color-ink-mute: #71717A;     /* zinc-500 — 메타·캡션 */
+  --color-line: #E4E4E7;         /* zinc-200 */
+
+  --color-primary: #4F46E5;      /* indigo-600 */
+  --color-primary-soft: #EEF2FF; /* indigo-50 */
+  --color-accent: #F59E0B;       /* amber-500 */
+  --color-positive: #10B981;     /* emerald-500 */
+  --color-neutral: #A1A1AA;      /* zinc-400 */
+  --color-negative: #F43F5E;     /* rose-500 */
 }
 
 html,
@@ -22,5 +32,14 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 다크모드 자동 적용 제거 — DILAB MVP 는 라이트 모드 전용.
-   다크모드 지원 필요 시 별도 toggle 로 재도입. */
+/* DESIGN.md §3.5 / §7 — reduced-motion 사용자는 모든 모션 비활성. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

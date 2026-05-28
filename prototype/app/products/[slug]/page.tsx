@@ -69,24 +69,18 @@ export default async function ProductPage({
   const fetchedAt = new Date().toISOString().slice(0, 10);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-6 py-6 text-zinc-900">
-      {/* 헤더 */}
-      <header className="border-b border-zinc-200 pb-4 mb-5 flex items-end justify-between">
+    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 text-zinc-900">
+      {/* 페이지 헤더 — 제품 정보 + 액션 */}
+      <header className="border-b border-zinc-200 pb-4 mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="flex items-center gap-3">
-            <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-              D
-            </span>
-            <span className="text-lg font-bold tracking-tight">DILAB</span>
-            <span className="text-xs text-zinc-500">🌿 {domain.name}</span>
-          </div>
-          <h1 className="text-2xl font-bold mt-3 tracking-tight">{product.name}</h1>
+          <div className="text-xs text-zinc-500 mb-2">🌿 {domain.name}</div>
+          <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
           <p className="text-sm text-zinc-500 mt-1">
             {product.brand} · {product.category} ·{" "}
             <span className="tabular-nums">{fetchedAt} 분석</span>
           </p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
           <a
             href={`/ask?product=${slug}`}
             className="text-sm px-3 py-1.5 rounded-md border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 font-medium"

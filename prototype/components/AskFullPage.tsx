@@ -144,26 +144,24 @@ export function AskFullPage({
   const currentProduct = products.find((p) => p.slug === productSlug);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-6 py-6">
-      <header className="border-b border-zinc-200 pb-4 mb-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <a href="/" className="inline-flex items-center gap-2 hover:opacity-80">
-            <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-              D
-            </span>
-            <span className="text-lg font-bold tracking-tight">DILAB Ask</span>
-          </a>
-          <span className="text-xs text-zinc-500">⚡ 자연어 질의 응답</span>
+    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+      <header className="border-b border-zinc-200 pb-4 mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="text-xs text-zinc-500 mb-2">⚡ 자연어 질의 응답</div>
+          <h1 className="text-2xl font-bold tracking-tight">Ask</h1>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-zinc-500">📦 분석 대상</span>
+          <label htmlFor="ask-product" className="text-xs text-zinc-500">
+            📦 분석 대상
+          </label>
           <select
+            id="ask-product"
             value={productSlug}
             onChange={(e) => {
               setProductSlug(e.target.value);
               setTurns([]);
             }}
-            className="px-3 py-1.5 text-sm rounded-md border border-zinc-200 bg-white max-w-md"
+            className="px-3 py-1.5 text-sm rounded-md border border-zinc-200 bg-white max-w-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
             <option value="">{`도메인 전체 (${domain})`}</option>
             {products.map((p) => (
