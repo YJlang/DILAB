@@ -40,3 +40,17 @@ SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol
 2026-05-28T00:37:24Z INF precheck component="Cloudflare API" details="API is reachable" run_id=13fdf18f-bfa8-4829-a804-0104d4e0ff60 status=pass target=api.cloudflare.com:443
 2026-05-28T00:37:24Z INF precheck complete hard_fail=false run_id=13fdf18f-bfa8-4829-a804-0104d4e0ff60 suggested_protocol=quic
 2026-05-28T00:37:24Z INF Registered tunnel connection connIndex=0 connection=bb0d025b-dfa0-4e84-a4fd-55577669d90a event=0 ip=198.41.200.193 location=icn05 protocol=quic
+2026-05-28T01:49:39Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:49:39Z INF Registered tunnel connection connIndex=0 connection=93dc3a78-7606-4519-8c01-17c5609a6b58 event=0 ip=198.41.200.193 location=icn05 protocol=quic
+2026-05-28T01:51:19Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:19Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:19Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:19Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:19Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:20Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-05-28T01:51:20Z INF Registered tunnel connection connIndex=0 connection=c9353e9e-8491-41c2-83fe-722924b0592d event=0 ip=198.41.200.193 location=icn05 protocol=quic
