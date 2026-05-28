@@ -33,9 +33,11 @@
 ```
 C:\dilab\
 ├── CLAUDE.md                       ← 이 파일 (Claude Code 자동 로드)
+├── DESIGN.md                       ← 디자인 헌법 (Claude Code 자동 로드) — 디자인·UI 작업의 우선 규칙
 ├── README.md                       ← 팀원 온보딩
 ├── PLAN.MD                         ← 교수님과의 대화 원문 (수정 금지)
 ├── .mcp.json                       ← MCP 4종 (supabase + cloudflare-bindings/builds/observability)
+├── .claude/skills/                 ← 디자인 리팩토링용 skill 3종 (designing-nextjs-ui, responsive-mobile-first, ui-ux-pro-max)
 ├── docs/
 │   ├── OPERATIONS.md               ← Cloudflare 배포·일상 운영 (PC 재기동 시 매일 루틴)
 │   ├── AGENT_HANDOFF.md            ← 다른 agent·환경에서 작업 이어받기
@@ -72,8 +74,10 @@ C:\dilab\
 ## 5. Claude Code 협업 컨벤션
 
 - **새 작업 시작 전**: `PLAN.MD`와 `benchmark/syncly-benchmark.md`를 먼저 읽어 컨텍스트 동기화.
+- **디자인·UI 작업 시**: `DESIGN.md` 가 *우선 규칙*. §1 Hard Rules (싱클리 시각 모방 금지·모바일 반응형 필수·일관성) 위반 금지.
 - **리서치·벤치마킹**: `deep-research`, `benchmarking` skill 사용 → 출력은 `benchmark/` 또는 `docs/research/`.
 - **PRD·로드맵·SWOT**: `product-management-workflows` skill 사용 → 출력은 `docs/prd/`.
+- **디자인 리팩토링**: `.claude/skills/` 의 3종 (`designing-nextjs-ui`, `responsive-mobile-first`, `ui-ux-pro-max`) 활용. 단 skill 권고와 DESIGN.md 가 충돌하면 **DESIGN.md 가 우선**.
 - **벤치마킹 보고서**의 갭 분석(섹션 9) 3분류(MVP 포함 / 다음 단계 / 의도적 제외)를 PRD의 기능 우선순위와 1:1 매핑할 것.
 - **코드 작성 시**: 주석은 *왜*만 작성. 무엇을 하는지는 식별자가 설명해야 함.
 
