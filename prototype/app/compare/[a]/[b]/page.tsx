@@ -84,7 +84,7 @@ export default async function ComparePage({
   const bPosPct = totalPct(data.b.sentiment_dist);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
         <div className="text-xs text-zinc-500 mb-2">⚖️ 데이터 기반 경쟁 비교</div>
         <h1 className="text-xl font-bold tracking-tight leading-relaxed">
@@ -104,12 +104,13 @@ export default async function ComparePage({
         </p>
       </header>
 
-      <section className="grid grid-cols-12 gap-5">
-        <div className="col-span-7 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-7 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
           <h2 className="text-base font-bold mb-3">5축 비교</h2>
           <CompareRadar data={radarData} aLabel={aLabel} bLabel={bLabel} />
 
-          <table className="w-full text-sm mt-4">
+          <div className="overflow-x-auto -mx-5 px-5 mt-4">
+          <table className="w-full text-sm min-w-[480px]">
             <thead className="text-zinc-500 border-b border-zinc-200 text-xs">
               <tr>
                 <th className="text-left py-2 font-medium">축</th>
@@ -148,9 +149,10 @@ export default async function ComparePage({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
-        <div className="col-span-5">
+        <div className="lg:col-span-5">
           <InsightsPanel
             aName={aLabel}
             bName={bLabel}

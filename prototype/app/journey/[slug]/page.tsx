@@ -34,7 +34,7 @@ export default async function JourneyPage({
   );
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
         <div className="text-xs text-zinc-500 mb-2">🗺️ 사용자 여정 지도</div>
         <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
@@ -46,7 +46,7 @@ export default async function JourneyPage({
       {/* 퍼널 */}
       <section className="mb-5 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
         <h2 className="text-base font-bold mb-4">단계별 언급 + 감성 분포</h2>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {stages.map((s, i) => {
             const items = grouped[s.key] ?? [];
             const n = items.length;
@@ -100,7 +100,7 @@ export default async function JourneyPage({
       </section>
 
       {/* 단계별 청크 인용 */}
-      <section className="grid grid-cols-2 gap-5">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {stages.map((s) => {
           const items = grouped[s.key] ?? [];
           return (

@@ -69,7 +69,7 @@ export default async function ProductPage({
   const fetchedAt = new Date().toISOString().slice(0, 10);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 text-zinc-900">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-zinc-900">
       {/* 페이지 헤더 — 제품 정보 + 액션 */}
       <header className="border-b border-zinc-200 pb-4 mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -115,18 +115,18 @@ export default async function ProductPage({
       </section>
 
       {/* 본문 그리드 */}
-      <section className="grid grid-cols-12 gap-5">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* 좌측 2/3 */}
-        <div className="col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-5">
           {/* 5축 레이더 */}
           <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
-            <div className="flex items-baseline justify-between mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-3">
               <h2 className="text-base font-bold">이 제품의 5가지 강점·약점</h2>
               <span className="text-xs text-zinc-500">
                 💡 카테고리 평균 7.0 점선 · 제품 점수 인디고
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-5 items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center">
               <RadarChart data={radarData} />
               <div className="space-y-3 text-sm">
                 <div className="flex items-baseline gap-2">
@@ -150,7 +150,7 @@ export default async function ProductPage({
           </div>
 
           {/* 감성 + 토픽 */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
               <h2 className="text-base font-bold mb-4">
                 리뷰 {sentiments.length}개의 분위기
@@ -173,7 +173,7 @@ export default async function ProductPage({
         </div>
 
         {/* 우측 1/3 */}
-        <aside className="col-span-4 space-y-5">
+        <aside className="lg:col-span-4 space-y-5">
           <CitationCard expertCount={expertCount} publicCount={publicCount} />
           <AskBox domainSlug="cosmetics" productSlug={slug} />
         </aside>

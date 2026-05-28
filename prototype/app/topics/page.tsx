@@ -20,7 +20,7 @@ export default async function TopicsPage({
   const total = topics.reduce((s, t) => s + t.doc_count, 0);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
         <div className="text-xs text-zinc-500 mb-2">🧩 토픽 탐색 (BERTopic)</div>
         <h1 className="text-2xl font-bold tracking-tight">
@@ -38,7 +38,7 @@ export default async function TopicsPage({
           실행 후 다시 보세요.
         </div>
       ) : (
-        <section className="grid grid-cols-2 gap-5">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {topics.map((t) => (
             <TopicCard key={t.id} t={t} total={total} />
           ))}

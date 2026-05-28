@@ -144,7 +144,7 @@ export function AskFullPage({
   const currentProduct = products.find((p) => p.slug === productSlug);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="text-xs text-zinc-500 mb-2">⚡ 자연어 질의 응답</div>
@@ -173,14 +173,14 @@ export function AskFullPage({
         </div>
       </header>
 
-      <div className="grid grid-cols-12 gap-5">
-        {/* 좌측 — 예시 질문 */}
-        <aside className="col-span-3 space-y-3">
-          <div className="bg-white rounded-lg border border-zinc-200 p-4 shadow-sm">
-            <div className="text-xs font-semibold text-zinc-500 mb-3 tracking-wide uppercase">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* 모바일에선 대화가 위, 예시는 아래로 collapse */}
+        <aside className="order-2 lg:order-1 lg:col-span-3 space-y-3">
+          <details className="lg:open:block bg-white rounded-lg border border-zinc-200 p-4 shadow-sm" open>
+            <summary className="text-xs font-semibold text-zinc-500 tracking-wide uppercase cursor-pointer lg:cursor-default list-none">
               💭 예시 질문
-            </div>
-            <div className="space-y-3">
+            </summary>
+            <div className="space-y-3 mt-3">
               {CATEGORIES.map((c) => (
                 <div key={c.tag}>
                   <div className="text-xs font-semibold text-zinc-700 mb-1.5">
@@ -191,7 +191,7 @@ export function AskFullPage({
                       <button
                         key={q}
                         onClick={() => send(q)}
-                        className="block w-full text-left text-xs px-2 py-1.5 rounded hover:bg-indigo-50 text-zinc-600 hover:text-indigo-700"
+                        className="block w-full text-left text-xs px-2 py-1.5 rounded hover:bg-indigo-50 text-zinc-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                       >
                         {q}
                       </button>
@@ -200,11 +200,11 @@ export function AskFullPage({
                 </div>
               ))}
             </div>
-          </div>
+          </details>
         </aside>
 
         {/* 우측 — 대화 */}
-        <section className="col-span-9 space-y-4">
+        <section className="order-1 lg:order-2 lg:col-span-9 space-y-4">
           <div className="min-h-[60vh] bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
             {turns.length === 0 ? (
               <EmptyState productName={currentProduct?.name} />

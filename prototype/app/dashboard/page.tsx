@@ -24,7 +24,7 @@ export default async function DashboardPage({
   const totalTopicDocs = stats.topics.reduce((s, t) => s + t.doc_count, 0);
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-zinc-200 pb-4 mb-5">
         <div className="text-xs text-zinc-500 mb-2">📊 도메인 대시보드</div>
         <h1 className="text-2xl font-bold tracking-tight">
@@ -37,7 +37,7 @@ export default async function DashboardPage({
       </header>
 
       {/* KPI */}
-      <section className="grid grid-cols-5 gap-3 mb-5">
+      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-5">
         <Kpi label="제품" n={stats.counts.products} hint="분석 완료" />
         <Kpi label="documents" n={stats.counts.documents} hint="reviews + expert" />
         <Kpi label="chunks" n={stats.counts.chunks} hint="BGE-M3 임베딩" />
@@ -49,16 +49,17 @@ export default async function DashboardPage({
         />
       </section>
 
-      <section className="grid grid-cols-12 gap-5">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* 제품 리스트 */}
-        <div className="col-span-8 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
+        <div className="lg:col-span-8 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
           <h2 className="text-base font-bold mb-3">
             분석된 제품 ({stats.products.length})
           </h2>
           {stats.products.length === 0 ? (
             <p className="text-sm text-zinc-500">아직 분석된 제품이 없어요.</p>
           ) : (
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto -mx-5 px-5">
+            <table className="w-full text-sm min-w-[600px]">
               <thead className="text-xs text-zinc-500 border-b border-zinc-200">
                 <tr>
                   <th className="text-left py-2 font-medium">제품</th>
@@ -111,11 +112,12 @@ export default async function DashboardPage({
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
 
         {/* 토픽 + 감성 */}
-        <aside className="col-span-4 space-y-4">
+        <aside className="lg:col-span-4 space-y-4">
           {/* 도메인 감성 */}
           <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
             <h2 className="text-base font-bold mb-3">도메인 전체 감성 분포</h2>
