@@ -29,3 +29,7 @@ build/
 .next/
 .open-next/
 .wrangler/
+
+# Runtime logs (ai-worker / cloudflared 로컬 로그)
+.run/*.log
+

@@ -4,8 +4,8 @@
 
 ## 한눈에 보기
 
-- **상태**: 풀스택 MVP 가동 (2026-05-27). S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 완성.
-- **데모 URL**: `http://localhost:3000` (로컬). 제품명 입력 → 1분 → 리포트 자동 생성.
+- **상태**: 풀스택 MVP + **Cloudflare Workers 배포 완료** (2026-05-28). S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 + OpenNext 어댑터.
+- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7). 단 분석·Ask 는 PC 의 ai-worker + cloudflared 가 살아있을 때만 동작 — [`docs/OPERATIONS.md`](docs/OPERATIONS.md) 참조.
 - **포지셔닝**: ***"양으로 답하는 싱클리, 질로 답하는 DILAB"*** — 모든 답변·점수에 출처 chunk 추적
 - **언어**: 한국어 (코드·기술명은 영문 유지)
 
@@ -53,6 +53,7 @@ Supabase          Postgres + pgvector + RLS + Auth + Storage      (cloud)
 | 파일 | 용도 |
 |---|---|
 | [`CLAUDE.md`](CLAUDE.md) | 프로젝트 정책·정체성 (Claude Code 자동 로드) |
+| [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | **Cloudflare 배포·일상 운영** (PC 재기동 시 매일 루틴 + 알려진 함정 8종) |
 | [`docs/AGENT_HANDOFF.md`](docs/AGENT_HANDOFF.md) | **다른 환경·다른 agent 가 작업 이어받기** |
 | [`docs/HOW_IT_WORKS.md`](docs/HOW_IT_WORKS.md) | **초보자용 내부 동작 + 외부 설명 가이드** (30초·3분·10분 버전) |
 | [`docs/prd/dilab-mvp-prd.md`](docs/prd/dilab-mvp-prd.md) | PRD v0.2 (B1~B6 + ★1·★2) |
@@ -63,15 +64,18 @@ Supabase          Postgres + pgvector + RLS + Auth + Storage      (cloud)
 | [`benchmark/syncly-benchmark.md`](benchmark/syncly-benchmark.md) | 싱클리 벤치마킹 (33소스, 약 14,000자) |
 | [`PLAN.MD`](PLAN.MD) | 교수님과의 대화 원문 (수정 금지) |
 
-## 빠른 시작 (새 환경 가정)
+## 빠른 시작
 
-자세한 절차: [`docs/AGENT_HANDOFF.md`](docs/AGENT_HANDOFF.md)
+**이미 배포된 환경의 일상 운영** (PC 재기동 후 매일 루틴): [`docs/OPERATIONS.md`](docs/OPERATIONS.md)
+
+**새 환경에서 처음 셋업**: [`docs/AGENT_HANDOFF.md`](docs/AGENT_HANDOFF.md) 3절
 
 ```powershell
-# 1) 저장소 + Supabase MCP 인증
+# 1) 저장소 + MCP 4종 인증 (.mcp.json 자동 로드)
 git clone https://github.com/YJlang/DILAB.git C:\DILAB
 cd C:\DILAB
-# Claude Code 안에서: /mcp → supabase → Authenticate
+# Claude Code 안에서: /mcp → 각 서버 Authenticate
+#   supabase / cloudflare-bindings / cloudflare-builds / cloudflare-observability
 
 # 2) ai-worker (.env 작성 후)
 cd ai-worker
@@ -79,13 +83,18 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e ".[dev]"
 Copy-Item .env.example .env  # 키 채우기
-uvicorn src.main:app --host 127.0.0.1 --port 8000
+uvicorn src.main:app --host 0.0.0.0 --port 8000
 
-# 3) Next.js (다른 터미널, .env.local 작성 후)
+# 3) Next.js — 로컬 개발 (다른 터미널, .env.local 작성 후)
 cd ..\prototype
+Copy-Item .env.local.example .env.local  # 키 채우기 (NEXT_PUBLIC_ 접두사 X)
 npm install
 npm run dev
 # http://localhost:3000
+
+# 4) (선택) Cloudflare Workers 에 배포
+#   - cloudflared tunnel --url http://localhost:8000 → URL 받아 wrangler.jsonc 갱신
+npm run deploy   # = opennextjs-cloudflare build && wrangler deploy
 ```
 
 필요한 secret 키 3종 (모두 무료 또는 매우 저렴):

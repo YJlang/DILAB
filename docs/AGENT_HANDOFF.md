@@ -2,9 +2,10 @@
 
 > 다른 환경 / 다른 세션의 **AI agent** (Claude Code 등) 가 즉시 이 프로젝트를 이어받을 수 있도록 작성한 인수인계 문서. **사람이 보기 좋게 작성하지 않았음** — agent 가 *최단 시간에 컨텍스트 복구* 하는 게 목적.
 
-- **AS_OF**: 2026-05-27
-- **상태**: 풀스택 MVP 가동. S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 완성.
+- **AS_OF**: 2026-05-28
+- **상태**: 풀스택 MVP + **Cloudflare Workers 배포 완료**. S1~S6 화면 + 자동 분석 파이프라인 + Supabase 영속화 + OpenNext 어댑터 운영.
 - **저장소**: `https://github.com/YJlang/DILAB` (main 브랜치)
+- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7) — 단 분석·Ask 는 PC 의 ai-worker + cloudflared 가 살아있을 때만 동작 ([OPERATIONS.md](OPERATIONS.md) 참조)
 
 ---
 
@@ -77,18 +78,21 @@ Supabase          mxofuzhfdthqpzhzctwd.supabase.co (한국 region)
 
 ---
 
-## 3. 부팅 (새 환경 가정)
+## 3. 부팅
+
+이미 배포된 환경의 일상 운영 (PC 재기동 후 매일 루틴 — 2~3분) 은 [OPERATIONS.md](OPERATIONS.md) 참조. 아래는 **완전히 새 머신에서 처음 셋업** 하는 절차.
 
 ```powershell
 # 1) 저장소
 git clone https://github.com/YJlang/DILAB.git C:\DILAB
 cd C:\DILAB
 
-# 2) Supabase MCP 인증 (project scope)
-#    .mcp.json 에 supabase 서버 등록되어 있음. Claude Code 안에서:
-#    /mcp → supabase → Authenticate
-#    또는 MCP 도구 mcp__supabase__authenticate 호출 → OAuth URL → 브라우저
-#    인증 후 mcp__supabase__complete_authentication 으로 callback URL 전달
+# 2) MCP 4종 인증 (.mcp.json 에 등록되어 있음)
+#    Claude Code 안에서 /mcp 메뉴 → 각 서버 → Authenticate (OAuth, 브라우저)
+#    - supabase
+#    - cloudflare-bindings
+#    - cloudflare-builds
+#    - cloudflare-observability
 
 # 3) ai-worker
 cd C:\DILAB\ai-worker
@@ -100,16 +104,23 @@ Copy-Item .env.example .env
 #   → SUPABASE_SERVICE_ROLE_KEY (dashboard → API → service_role)
 #   → DEEPSEEK_API_KEY          (platform.deepseek.com)
 #   → NAVER_CLIENT_ID/SECRET    (developers.naver.com)
-uvicorn src.main:app --host 127.0.0.1 --port 8000
+uvicorn src.main:app --host 0.0.0.0 --port 8000
 
-# 4) Next.js (다른 터미널)
+# 4) Next.js — 로컬 개발
 cd C:\DILAB\prototype
-# .env.local 작성 (sb_publishable_... 키만 — service_role 절대 X)
-#   NEXT_PUBLIC_SUPABASE_URL=https://mxofuzhfdthqpzhzctwd.supabase.co
-#   NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
-#   NEXT_PUBLIC_AI_WORKER_URL=http://127.0.0.1:8000
+# .env.local 작성 (.env.local.example 복사). NEXT_PUBLIC_ 접두사 절대 X.
+#   SUPABASE_URL=https://mxofuzhfdthqpzhzctwd.supabase.co
+#   SUPABASE_ANON_KEY=sb_publishable_... 또는 eyJ...
+#   AI_WORKER_URL=http://127.0.0.1:8000
+Copy-Item .env.local.example .env.local
 npm install
-npm run dev
+npm run dev   # → http://localhost:3000
+
+# 5) (선택) Cloudflare Workers 에 배포
+#   - wrangler.jsonc 의 vars.AI_WORKER_URL 을 본인 tunnel URL 로 교체
+#   - 다른 터미널에서: cloudflared tunnel --url http://localhost:8000
+#   - URL 받아 wrangler.jsonc 갱신 → 배포
+npm run deploy   # = opennextjs-cloudflare build && wrangler deploy
 ```
 
 ---
@@ -125,11 +136,14 @@ npm run dev
 | `LLM_MODEL` | `ai-worker/.env` | `deepseek-chat` (V3) 기본 |
 | `NAVER_CLIENT_ID/SECRET` | `ai-worker/.env` | developers.naver.com → 검색 + 데이터랩 API |
 | `EMBEDDING_MODEL_NAME` | `ai-worker/.env` | `BAAI/bge-m3` (1024 dim) |
-| `NEXT_PUBLIC_SUPABASE_URL` | `prototype/.env.local` | 같은 URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `prototype/.env.local` | `sb_publishable_...` (modern format, 브라우저 OK) |
-| `NEXT_PUBLIC_AI_WORKER_URL` | `prototype/.env.local` | `http://127.0.0.1:8000` (개발) |
+| `SUPABASE_URL` | `prototype/.env.local` *(dev)* + `prototype/wrangler.jsonc` *vars* (prod) | 같은 URL |
+| `SUPABASE_ANON_KEY` | `prototype/.env.local` *(dev)* + `prototype/wrangler.jsonc` *vars* (prod) | publishable (`sb_publishable_...` 또는 `eyJ...`), RLS 보호 |
+| `AI_WORKER_URL` | `prototype/.env.local` *(dev)* + `prototype/wrangler.jsonc` *vars* (prod) | dev: `http://127.0.0.1:8000` / prod: `https://<random>.trycloudflare.com` |
 
-⚠️ `service_role` 키는 *서버 사이드만*. 클라이언트(Next.js public env) 에 넣으면 RLS 우회 가능 → 절대 X.
+⚠️ **두 가지 큰 함정** (지난 디버그 cycle 에서 학습):
+1. `service_role` 키는 *서버 사이드만*. 클라이언트(public env) 에 넣으면 RLS 우회 가능 → 절대 X.
+2. **`NEXT_PUBLIC_` 접두사 사용 금지.** Next.js 가 build 시점에 inline (DefinePlugin) → Cloudflare Workers 의 runtime vars 가 적용되지 않음. 위 3개 변수 모두 *server-only* 로 사용 (route handlers / Server Components / SSR).
+3. **production vars 의 source-of-truth 는 `wrangler.jsonc` 의 `vars` 블록.** `keep_vars: true` 가 있긴 하지만 새 변수는 반드시 이 파일에 추가해야 deploy 마다 안정. dashboard 직접 추가는 권장 X.
 
 ---
 
@@ -140,10 +154,15 @@ npm run dev
 | 서버 | scope | 용도 |
 |---|---|---|
 | `supabase` | project (`.mcp.json`) | DB 마이그레이션·RPC·테이블 조회. 인증 OAuth |
+| `cloudflare-bindings` | project (`.mcp.json`) | Worker·KV·D1·R2 조회/수정 + Cloudflare 문서 검색 |
+| `cloudflare-builds` | project (`.mcp.json`) | Workers Builds (Git 연동) 로그 조회 |
+| `cloudflare-observability` | project (`.mcp.json`) | Worker logs/metrics 쿼리 — 530/502 등 디버깅 핵심 도구 |
 | `naver-search` | user | `NAVER_CLIENT_ID/SECRET` 필요. 새 제품 검색 시 |
 | `exa` | user | 글로벌 시맨틱 웹 검색 |
 | `playwright` | user | UI 검증 + 화면 캡쳐 |
 | `skillsmp` | user | 스킬 검색 (설치는 CLI 사용) |
+
+⚠️ 운영 디버그 시 **가장 자주 쓰는 도구**: `mcp__cloudflare-observability__query_worker_observability` — 최근 worker 에러 로그를 직접 들여다 본다. 530 코드 분류 등은 메시지에 `error code: 1016` 같은 결정적 단서가 박혀있어 원인 분석 시간을 크게 줄여준다.
 
 ### 글로벌 스킬 (`~/.claude/skills/`)
 
@@ -191,6 +210,7 @@ npm run dev
 | M2 | B1 데이터 파이프라인 — seed + naver 수동 인제스션 + match_chunks RPC | `src/ingestion/*` |
 | M3 | B2 BERTopic + B3 분류·감성 + B4 여정 매핑 + B5 RAG + 5축 ratings | `src/topics`, `src/analysis`, `src/rag`, `src/ratings` |
 | M4 | 자동 분석 (`/analyze`) + S6 비교 (`/compare`) + S1~S6 풀 UI + slug 개선 | `prototype/app/*`, `prototype/components/*` |
+| M5 | Cloudflare Workers 배포 (OpenNext) + cloudflared Quick Tunnel + Supabase lazy proxy + observability MCP | `prototype/wrangler.jsonc`, `prototype/open-next.config.ts`, `prototype/lib/supabase.ts`, [`docs/OPERATIONS.md`](OPERATIONS.md) |
 
 ---
 
@@ -219,6 +239,13 @@ npm run dev
 | Playwright `fill` 후 button disabled | React controlled input 의 state 미갱신 | `evaluate` 로 native setter + `dispatchEvent("input", {bubbles:true})` |
 | `auto_ingest` 가 실패 후 documents 만 들어감 | 트랜잭션 안 묶임 — partial commit | 실패 시 SQL로 `delete from documents where product_id = ...` 후 재실행 |
 | Next.js create-next-app 의 globals.css 자동 다크모드 | `prefers-color-scheme: dark` 미디어 쿼리 | DILAB 은 라이트 전용 — 미디어 쿼리 제거됨 (현재 상태) |
+| 배포 후 `/products` 등 500, "supabaseUrl is required" | `lib/supabase.ts` 가 module 평가 시점에 `createClient(undefined,...)` → "Collecting page data" 가 throw | Lazy Proxy 패턴 적용 (`prototype/lib/supabase.ts` 참조) |
+| Cloudflare runtime vars 가 안 잡힘, build 시 inline 됨 | `NEXT_PUBLIC_*` 접두사가 DefinePlugin 으로 build-time 박힘 | 접두사 제거 + server-only 사용 |
+| `wrangler deploy` 마다 dashboard 환경변수 삭제 | `wrangler.jsonc` 의 `vars` 가 source-of-truth | `keep_vars: true` + 모든 변수는 `wrangler.jsonc` 에 박기 |
+| 사이트에서 "ai-worker 530" / `error code: 1016` | Worker 가 옛 tunnel URL 가리킴 (cloudflared 재기동마다 URL 변동) | `wrangler.jsonc` 의 `AI_WORKER_URL` 갱신 → `npm run deploy` |
+| 배포 후 `ChunkLoadError` 500 | `.open-next/` 빌드가 stale 한 채 `wrangler deploy` 만 돌림 | `npm run deploy` (= build + deploy 묶음) |
+| `/api/analyze` 만 항상 502 | Cloudflare Workers 30초 hard timeout < 60~90초 분석 | (deferred) async queue + polling |
+| `wrangler deploy` 가 `CLOUDFLARE_API_TOKEN` 요구 | 비대화형 셸은 OAuth cache 못 읽음 | 사람이 직접 PowerShell 창에서 실행, 또는 `wrangler login` 한 번 |
 
 ---
 
@@ -241,12 +268,13 @@ npm run dev
 1. README.md                          전체 한눈에
 2. CLAUDE.md                          프로젝트 정책 (자동 로드)
 3. docs/AGENT_HANDOFF.md              이 파일
-4. docs/HOW_IT_WORKS.md               기술 동작 + 외부 설명
-5. docs/research/tech-stack-decision.md  ADR
-6. docs/db/schema.md                  ERD v0.2 + 핵심 쿼리
-7. docs/prd/dilab-mvp-prd.md          PRD v0.2 (B1~B6 + ★1·★2)
-8. ai-worker/README.md                백엔드 설치
-9. (이후 코드)
+4. docs/OPERATIONS.md                 Cloudflare 배포·일상 운영 (PC 재기동 후 매일 루틴)
+5. docs/HOW_IT_WORKS.md               기술 동작 + 외부 설명
+6. docs/research/tech-stack-decision.md  ADR
+7. docs/db/schema.md                  ERD v0.2 + 핵심 쿼리
+8. docs/prd/dilab-mvp-prd.md          PRD v0.2 (B1~B6 + ★1·★2)
+9. ai-worker/README.md                백엔드 설치
+10. (이후 코드)
 ```
 
 ---

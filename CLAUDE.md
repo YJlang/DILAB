@@ -35,13 +35,19 @@ C:\dilab\
 ├── CLAUDE.md                       ← 이 파일 (Claude Code 자동 로드)
 ├── README.md                       ← 팀원 온보딩
 ├── PLAN.MD                         ← 교수님과의 대화 원문 (수정 금지)
+├── .mcp.json                       ← MCP 4종 (supabase + cloudflare-bindings/builds/observability)
 ├── docs/
+│   ├── OPERATIONS.md               ← Cloudflare 배포·일상 운영 (PC 재기동 시 매일 루틴)
+│   ├── AGENT_HANDOFF.md            ← 다른 agent·환경에서 작업 이어받기
+│   ├── HOW_IT_WORKS.md             ← 내부 동작 + 외부 설명 (30초·3분·10분 버전)
 │   ├── CLAUDE_CODE_SETUP.md        ← Claude Code + skill 설치 (Win/Mac/Linux)
-│   └── AGENT_WORKFLOW.md           ← skill·agent 사용 워크플로
+│   ├── AGENT_WORKFLOW.md           ← skill·agent 사용 워크플로
+│   ├── prd/, research/, db/, design/  ← PRD / ADR / ERD / 와이어프레임
+├── prototype/                      ← Next.js 16 — Cloudflare Workers 에 배포
+│   ├── wrangler.jsonc              ← production vars 의 source-of-truth
+│   └── open-next.config.ts         ← OpenNext 어댑터 설정
+├── ai-worker/                      ← Python FastAPI — 사용자 PC 에서 실행
 ├── benchmark/                      ← 1단계 산출물 (완료)
-│   ├── syncly-benchmark.md         ← 메인 벤치마킹 보고서
-│   ├── sources.md                  ← 인용 레지스트리 (33소스)
-│   └── research-notes/             ← 5개 task별 원본 메모
 └── .claude/
     └── settings.local.json         ← 개인별 권한 (gitignore, 공유 X)
 ```
@@ -50,12 +56,18 @@ C:\dilab\
 
 | 단계 | 상태 | 산출물 |
 |---|---|---|
-| 1. 싱클리 벤치마킹 리서치 | **완료** (2026-05-26) | `benchmark/syncly-benchmark.md` (+ 부록 D 2026-05-26 추가) |
-| 2. DILAB MVP PRD 작성 | **v0.1 초안 완료** (2026-05-26) — 교수님/오현/협력사 대표 검토 대기 | `docs/prd/dilab-mvp-prd.md` |
-| 3. 기능 우선순위(P0/P1/P2) 확정 | PRD v0.1 에 매핑 완료 — Open Questions 해소 후 v1.0 으로 승급 예정 | PRD 섹션 5 |
-| 4. 기술 스택 ADR (M1) | 다음 — 2026-06-10 ~ 06-23 예정 | `docs/research/tech-stack-decision.md` (예정) |
-| 5. 오현 학생과 분담 | PRD 검토 단계에서 정리 | 별도 협의 |
-| 6. MVP 구현 (M2~M7) | 향후 — 2026-06-24 ~ 11-15 | `src/` (예정) |
+| 1. 싱클리 벤치마킹 리서치 | **완료** (2026-05-26) | `benchmark/syncly-benchmark.md` |
+| 2. DILAB MVP PRD 작성 | **v0.2 완료** | `docs/prd/dilab-mvp-prd.md` |
+| 3. 기능 우선순위(P0/P1/P2) 확정 | PRD 섹션 5 에 매핑 완료 | PRD 섹션 5 |
+| 4. 기술 스택 ADR (M1) | **완료** | `docs/research/tech-stack-decision.md` |
+| 5. MVP 풀스택 구현 (M2~M4) | **완료** (2026-05-27) — S1~S6 + 자동 분석 파이프라인 | `prototype/`, `ai-worker/` |
+| 6. Cloudflare 배포 운영 (M5) | **완료** (2026-05-28) — Workers + OpenNext + cloudflared Quick Tunnel | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
+| 7. 데이터 확장 + 두 번째 도메인 | 다음 | (예정) |
+
+### 운영 정보 (AS_OF 2026-05-28)
+- **데모 URL**: `https://dilab.sean111400.workers.dev` (24/7)
+- **AI 기능**: PC 의 ai-worker + cloudflared 가 살아있을 때만 (분석·Ask). 정적 페이지는 항상 OK.
+- **재기동·배포 절차**: [`docs/OPERATIONS.md`](docs/OPERATIONS.md) — 새 세션 시작 시 반드시 먼저 읽기.
 
 ## 5. Claude Code 협업 컨벤션
 
