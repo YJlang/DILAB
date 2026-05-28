@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { CompareRadar } from "@/components/CompareRadar";
 import { InsightsPanel } from "@/components/InsightsPanel";
-import { cfEnv } from "@/lib/cf-env";
 
 export const dynamic = "force-dynamic";
+// Server Component 에서는 process.env 직접 사용 (OpenNext 가 vars + secrets 자동 매핑).
+// getCloudflareContext() 는 RSC evaluation 시점에 throw 위험 → worker bundle 전체 깨뜨림.
 
 type Snapshot = {
   id: string;
@@ -36,12 +37,16 @@ type CompareData = {
 };
 
 async function getCompare(a: string, b: string): Promise<CompareData> {
-  const env = cfEnv();
-  const res = await fetch(env.MODAL_COMPARE_URL, {
+  const modalUrl = process.env.MODAL_COMPARE_URL;
+  const proxyToken = process.env.MODAL_PROXY_TOKEN;
+  if (!modalUrl || !proxyToken) {
+    throw new Error("MODAL_COMPARE_URL / MODAL_PROXY_TOKEN missing at runtime");
+  }
+  const res = await fetch(modalUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      _token: env.MODAL_PROXY_TOKEN,
+      _token: proxyToken,
       slug_a: a,
       slug_b: b,
       domain_slug: "cosmetics",
