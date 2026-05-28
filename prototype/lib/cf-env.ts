@@ -25,6 +25,9 @@ export type CfEnv = {
   DEEPSEEK_API_KEY: string;
   DEEPSEEK_BASE_URL: string;
   LLM_MODEL: string;
+  MODAL_TRIGGER_URL: string;
+  MODAL_COMPARE_URL: string;
+  MODAL_PROXY_TOKEN: string;
 };
 
 export function cfEnv(): CfEnv {

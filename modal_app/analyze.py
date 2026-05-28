@@ -46,17 +46,17 @@ app = modal.App("dilab-analyze")
 image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install(
-        "sentence-transformers==3.0.1",
-        "bertopic==0.16.4",
-        "umap-learn==0.5.6",
-        "hdbscan==0.8.38",
-        "scikit-learn==1.5.2",
-        "supabase==2.6.0",
-        "openai==1.50.0",
-        "httpx==0.27.0",
-        "pydantic==2.9.0",
-        "pydantic-settings==2.5.0",
-        "fastapi==0.115.0",
+        "sentence-transformers>=3.0,<4",
+        "bertopic>=0.16,<0.17",
+        "umap-learn>=0.5",
+        "hdbscan>=0.8.38",
+        "scikit-learn>=1.5,<2",
+        "supabase>=2.6",
+        "openai>=1.50",
+        "httpx>=0.27",
+        "pydantic>=2.9,<3",
+        "pydantic-settings>=2.5",
+        "fastapi>=0.115",
     )
     .env(
         {
@@ -138,6 +138,37 @@ def analyze_product_task(job_id: str, product_query: str, domain_slug: str) -> N
         update(status="error", error=f"{type(e).__name__}: {e}"[:500])
         traceback.print_exc()
         raise
+
+
+@app.function(
+    image=image,
+    cpu=0.5,
+    memory=2048,
+    secrets=[SECRET],
+    timeout=60,
+)
+@modal.fastapi_endpoint(method="POST", docs=False)
+def compare(body: dict[str, Any]) -> dict[str, Any]:
+    """동기 비교 endpoint — Cloudflare /compare/[a]/[b] 에서 호출. ~5초 응답.
+
+    Body: { _token, slug_a, slug_b, domain_slug? }
+    """
+    import sys
+    from dataclasses import asdict
+
+    if body.get("_token") != os.environ.get("MODAL_PROXY_TOKEN", ""):
+        return {"error": "unauthorized"}
+
+    slug_a = body.get("slug_a")
+    slug_b = body.get("slug_b")
+    if not slug_a or not slug_b:
+        return {"error": "slug_a and slug_b required"}
+
+    sys.path.insert(0, "/root")
+    from src.compare import compare as _compare  # type: ignore
+
+    result = _compare(body.get("domain_slug", "cosmetics"), slug_a, slug_b)
+    return asdict(result)
 
 
 @app.function(

@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { CompareRadar } from "@/components/CompareRadar";
 import { InsightsPanel } from "@/components/InsightsPanel";
+import { cfEnv } from "@/lib/cf-env";
 
 export const dynamic = "force-dynamic";
-
-const AI_WORKER =
-  process.env.AI_WORKER_URL ?? "http://127.0.0.1:8000";
 
 type Snapshot = {
   id: string;
@@ -38,16 +36,26 @@ type CompareData = {
 };
 
 async function getCompare(a: string, b: string): Promise<CompareData> {
-  const res = await fetch(`${AI_WORKER}/compare`, {
+  const env = cfEnv();
+  const res = await fetch(env.MODAL_COMPARE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ slug_a: a, slug_b: b, domain_slug: "cosmetics" }),
+    body: JSON.stringify({
+      _token: env.MODAL_PROXY_TOKEN,
+      slug_a: a,
+      slug_b: b,
+      domain_slug: "cosmetics",
+    }),
     cache: "no-store",
   });
   if (!res.ok) {
     throw new Error(`compare ${res.status}: ${await res.text()}`);
   }
-  return res.json();
+  const data = (await res.json()) as CompareData | { error: string };
+  if ("error" in data) {
+    throw new Error(`compare: ${data.error}`);
+  }
+  return data;
 }
 
 export default async function ComparePage({

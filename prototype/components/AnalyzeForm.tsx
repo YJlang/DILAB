@@ -1,15 +1,21 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-type AnalyzeResult = {
-  product_id?: string;
-  slug?: string;
-  name?: string;
-  brand?: string;
-  documents_added?: number;
-  elapsed_sec?: number;
-  error?: string;
+type JobStatus = "pending" | "running" | "done" | "error";
+
+type JobProgress = {
+  step?: number;
+  of_steps?: number;
+  message?: string;
+};
+
+type JobRow = {
+  id: string;
+  status: JobStatus;
+  progress: JobProgress;
+  result_slug: string | null;
+  error: string | null;
 };
 
 const EXAMPLES = [
@@ -19,71 +25,100 @@ const EXAMPLES = [
   "메디힐 NMF 마스크팩",
 ];
 
+const POLL_INTERVAL_MS = 5000;
+const POLL_TIMEOUT_MS = 5 * 60 * 1000; // 5분
+
 export function AnalyzeForm() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [stage, setStage] = useState<string>("");
+  const [progress, setProgress] = useState<JobProgress | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  function stopPolling() {
+    if (pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }
+
+  async function pollOnce(jobId: string, startedAt: number) {
+    try {
+      const r = await fetch(`/api/analyze/status/${jobId}`);
+      if (!r.ok) {
+        const txt = await r.text();
+        stopPolling();
+        setError(`상태 조회 실패 (${r.status}): ${txt.slice(0, 120)}`);
+        setLoading(false);
+        return;
+      }
+      const job = (await r.json()) as JobRow;
+      setProgress(job.progress);
+
+      if (job.status === "done" && job.result_slug) {
+        stopPolling();
+        router.push(`/products/${job.result_slug}`);
+        return;
+      }
+      if (job.status === "error") {
+        stopPolling();
+        setError(job.error ?? "분석 중 알 수 없는 오류");
+        setLoading(false);
+        return;
+      }
+      if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
+        stopPolling();
+        setError("분석이 5분을 초과해 중단했어요. 운영자에게 문의해주세요.");
+        setLoading(false);
+      }
+    } catch (e) {
+      stopPolling();
+      setError(`네트워크 오류: ${String(e).slice(0, 120)}`);
+      setLoading(false);
+    }
+  }
 
   async function submit(e?: React.FormEvent) {
     e?.preventDefault();
     if (!query.trim() || loading) return;
     setLoading(true);
     setError(null);
-    setStage("📥 네이버에서 후기 + 성분 글 + 제품 메타 수집 중…");
+    setProgress({ step: 0, of_steps: 3, message: "분석 큐에 등록 중…" });
 
     try {
-      // 실제 분석은 동기 1분 — 백엔드가 5단계 다 돌고 응답
-      // 클라이언트 UX 는 stage 메시지를 시간차로 갱신
-      const stages = [
-        "📥 네이버 검색 (후기 30 + 성분 15)",
-        "🧩 BGE-M3 임베딩 + Supabase 저장",
-        "🤖 DeepSeek 분류·감성·여정 라벨링",
-        "📊 5축 평가 점수 산출",
-      ];
-      let i = 0;
-      const ticker = setInterval(() => {
-        if (i < stages.length) {
-          setStage(stages[i]);
-          i++;
-        }
-      }, 15000);
-
       const r = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product_query: query.trim() }),
       });
-      clearInterval(ticker);
-
       if (!r.ok) {
-        setError(`분석 실패 (${r.status})`);
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setError(j.error ?? `등록 실패 (${r.status})`);
+        setLoading(false);
         return;
       }
-      const data: AnalyzeResult = await r.json();
-      if (data.error) {
-        setError(data.error);
-        return;
-      }
-      if (!data.slug) {
-        setError("리포트 slug 가 반환되지 않았어요");
-        return;
-      }
-      setStage(`✅ 완료 — ${data.documents_added}건 분석 (${data.elapsed_sec}초)`);
-      router.push(`/products/${data.slug}`);
+      const { job_id } = (await r.json()) as { job_id: string };
+      const startedAt = Date.now();
+      // 즉시 1회 + 이후 폴링
+      void pollOnce(job_id, startedAt);
+      pollRef.current = setInterval(() => {
+        void pollOnce(job_id, startedAt);
+      }, POLL_INTERVAL_MS);
     } catch (err) {
       setError(String(err));
-    } finally {
       setLoading(false);
     }
   }
 
   return (
-    <form
-      onSubmit={submit}
-      className="w-full max-w-xl space-y-3"
-    >
+    <form onSubmit={submit} className="w-full max-w-xl space-y-3">
       <div className="flex gap-2">
         <input
           value={query}
@@ -115,20 +150,25 @@ export function AnalyzeForm() {
         ))}
       </div>
 
-      {loading && (
-        <div className="text-sm text-zinc-600 bg-indigo-50/50 border border-indigo-100 rounded-md px-4 py-3">
+      {loading && progress && (
+        <div className="text-sm text-zinc-700 bg-indigo-50/50 border border-indigo-100 rounded-md px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
-            {stage}
+            <span className="font-medium">{progress.message ?? "처리 중…"}</span>
+            {progress.step != null && progress.of_steps != null && (
+              <span className="ml-auto text-xs text-zinc-500">
+                {progress.step}/{progress.of_steps}
+              </span>
+            )}
           </div>
           <div className="text-xs text-zinc-500 mt-1.5">
-            약 1분 소요 (네이버 검색 + BGE-M3 임베딩 + DeepSeek 라벨링 + 5축 산출)
+            Modal 서버리스 함수가 백그라운드 처리 중 · 약 60~120초 소요 · 첫 실행은 모델 다운로드로 +30초
           </div>
         </div>
       )}
 
       {error && (
-        <p className="text-sm text-zinc-700 bg-zinc-50 border border-zinc-200 px-4 py-3 rounded-md">
+        <p className="text-sm text-zinc-700 bg-zinc-50 border border-zinc-200 px-4 py-3 rounded-md whitespace-pre-wrap">
           ⚠️ {error}
         </p>
       )}
