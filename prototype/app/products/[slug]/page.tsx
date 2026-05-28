@@ -189,8 +189,8 @@ export default async function ProductPage({
       </section>
 
       <footer className="mt-6 text-xs text-zinc-500">
-        🔍 모든 데이터는 Supabase 실시간 조회 · BGE-M3 임베딩 · DeepSeek 분석.
-        ai-worker FastAPI 가 127.0.0.1:8000 에서 실행 중이어야 Ask 가 동작해요.
+        🔍 모든 데이터는 Supabase 실시간 조회 · BGE-M3 임베딩 (Cloudflare
+        Workers AI) · DeepSeek 합성. 출처 청크는 평가·답변마다 추적돼요.
       </footer>
     </main>
   );

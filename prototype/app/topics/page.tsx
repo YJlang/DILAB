@@ -46,9 +46,8 @@ export default async function TopicsPage({
       )}
 
       <footer className="mt-6 text-xs text-zinc-500">
-        💡 청크 수가 적은 도메인 (≤50) 은 토픽 분리가 작거나 불완전할 수 있어요.
-        제품 더 추가 분석 후 <code>run_topics.py</code> 재실행 시 토픽이 더
-        세분화됩니다.
+        💡 BGE-M3 임베딩 → UMAP 차원 축소 → HDBSCAN 클러스터링. 청크 수가 적으면
+        토픽이 작거나 불완전할 수 있어요. 제품을 더 추가 분석할수록 더 세분화돼요.
       </footer>
     </main>
   );
