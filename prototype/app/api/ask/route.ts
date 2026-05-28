@@ -1,33 +1,34 @@
 /**
- * DILAB Ask API — Next.js → ai-worker FastAPI 호출 프록시.
- * ai-worker 가 /api/ask 엔드포인트를 노출하면 그쪽으로 forward.
- * 현재는 ai-worker 가 아직 endpoint 추가 X — 임시로 ai-worker 직접 호출 형식.
- *
- * TODO: ai-worker FastAPI 에 POST /ask 라우트 추가 후 단순 fetch 로 전환.
+ * DILAB Ask API — Cloudflare Workers 안에서 직접 RAG 처리 (Phase 1).
+ * BGE-M3 임베딩(Workers AI) + match_chunks RPC + DeepSeek 합성 모두 worker 내부.
+ * ai-worker FastAPI 호출 폐기.
  */
 import { NextResponse } from "next/server";
+import { ask } from "@/lib/rag";
 
-const AI_WORKER = process.env.AI_WORKER_URL ?? "http://127.0.0.1:8000";
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const res = await fetch(`${AI_WORKER}/ask`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  try {
+    const body = (await req.json()) as {
+      query?: string;
+      domain?: string;
+      product?: string | null;
+    };
+    if (!body.query || typeof body.query !== "string") {
+      return NextResponse.json({ error: "query required" }, { status: 400 });
+    }
+    const result = await ask({
       query: body.query,
-      domain_slug: body.domain ?? "cosmetics",
-      product_slug: body.product ?? null,
-      expert_k: 3,
-      public_k: 3,
-      persist: true,
-    }),
-  });
-  if (!res.ok) {
-    return NextResponse.json(
-      { error: `ai-worker ${res.status}` },
-      { status: 502 }
-    );
+      domainSlug: body.domain ?? "cosmetics",
+      productSlug: body.product ?? null,
+      expertK: 3,
+      publicK: 3,
+    });
+    return NextResponse.json(result);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("[/api/ask]", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
-  return NextResponse.json(await res.json());
 }
