@@ -1,4 +1,4 @@
-import { Layers } from "lucide-react";
+import { Layers, BookOpen } from "lucide-react";
 import { getTopicsWithChunks } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
@@ -49,7 +49,7 @@ export default async function TopicsPage({
       )}
 
       <footer className="mt-6 text-xs text-muted">
-        💡 BGE-M3 임베딩 → UMAP 차원 축소 → HDBSCAN 클러스터링. 청크 수가 적으면
+        BGE-M3 임베딩 → UMAP 차원 축소 → HDBSCAN 클러스터링. 청크 수가 적으면
         토픽이 작거나 불완전할 수 있어요. 제품을 더 추가 분석할수록 더 세분화돼요.
       </footer>
     </main>
@@ -129,8 +129,9 @@ function TopicCard({
 
       {/* 대표 청크 */}
       <div className="space-y-1.5 mt-3">
-        <div className="text-xs font-semibold text-muted">
-          📖 대표 청크 (상위 {Math.min(t.chunks.length, 5)}개)
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-muted">
+          <BookOpen size={13} strokeWidth={2} aria-hidden /> 대표 청크 (상위{" "}
+          {Math.min(t.chunks.length, 5)}개)
         </div>
         {t.chunks.slice(0, 5).map((c) => (
           <div
