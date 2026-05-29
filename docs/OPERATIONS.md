@@ -181,7 +181,7 @@ order by created_at desc limit 5;
 | 5 | Modal 함수에서 ai-worker `src/` import 실패 | `add_local_dir("./ai-worker/src", ...)` 의 path 가 *modal deploy 실행 디렉토리 기준* | 항상 `cd C:\dilab` 후 `modal deploy modal_app/analyze.py` |
 | 6 | Modal deploy 시 unicode codec 에러 | PowerShell cp949 콘솔이 ✓ 같은 문자 표시 못함 | `chcp 65001; $env:PYTHONIOENCODING="utf-8"` 후 deploy |
 | 7 | 분석 5분 timeout | Modal 함수 timeout=900s 이지만 BGE-M3 cold start + 처리 ~3분. 정상 범위. 단 운영자가 *모든 secret 등록 후 첫 호출* 이 가장 오래 | 두 번째부터 ~90초. 정상. |
-| 8 | Deploy 직후 ~30초간 일부 요청만 500 (`TypeError: handler is not a function` 또는 `ChunkLoadError`) — observability 에 6개 정도 떨어지고 자연 안정화 | OpenNext bundle 의 module-evaluation cold-start race. chunk graph 가 바뀐 직후 (예: layout.tsx 에 새 server component 추가) 첫 isolate 들이 chunks 를 race 로 lazy-load → 일부 실패. 코드 자체는 정상 | `npm run deploy` 가 마지막에 `npm run smoke` 자동 실행 (2초 wait → 5개 페이지 × 2회 핑) → 사용자 도달 전 worker warm-up. 그래도 첫 접속이 500 이면 1분 후 hard refresh (Ctrl+Shift+R) |
+| 8 | Deploy 직후 ~30초간 요청이 500 (`TypeError: handler is not a function` 또는 `ChunkLoadError`) — observability 에 떨어지고 자연 안정화 | OpenNext bundle 의 module-evaluation cold-start race. chunk graph 가 바뀐 직후 (예: layout.tsx 변경, 새 의존성 추가) 첫 isolate 들이 chunks 를 race 로 lazy-load → 실패. 코드 자체는 정상 (v2.0 리디자인 배포에서 전 페이지 ~30초 ChunkLoadError 후 자기안정화 확인) | `npm run deploy` 끝의 `npm run smoke` 가 **각 페이지를 200 될 때까지 최대 60초 polling** → cold-start 윈도우를 흡수하며 warm-up, 전부 200 이어야 종료(아니면 exit 1). `smoke FAILED` 면 실제 런타임 에러 의심 → observability 확인 |
 
 ---
 
