@@ -15,6 +15,7 @@ import {
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
+import { Spinner } from "@/components/Spinner";
 
 type Citation = {
   rank: number;
@@ -163,6 +164,7 @@ export function AskFullPage({
   }
 
   const currentProduct = products.find((p) => p.slug === productSlug);
+  const sending = turns.some((t) => t.loading);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -264,10 +266,19 @@ export function AskFullPage({
             />
             <button
               type="submit"
-              disabled={!query.trim()}
+              disabled={!query.trim() || sending}
+              aria-busy={sending}
               className="inline-flex items-center gap-1.5 px-5 py-3 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
-              물어보기 <ArrowRight size={15} strokeWidth={2.2} aria-hidden />
+              {sending ? (
+                <>
+                  <Spinner size={15} /> 답변 받는 중…
+                </>
+              ) : (
+                <>
+                  물어보기 <ArrowRight size={15} strokeWidth={2.2} aria-hidden />
+                </>
+              )}
             </button>
           </form>
         </section>

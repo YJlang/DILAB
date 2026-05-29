@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ArrowRight } from "lucide-react";
+import { Spinner } from "@/components/Spinner";
 
 export function CompareSelector({
   productSlug,
@@ -12,10 +13,14 @@ export function CompareSelector({
 }) {
   const router = useRouter();
   const [other, setOther] = useState("");
+  // 비교 페이지는 Modal fetch 로 수 초 걸림 → 전환 pending 동안 스피너로 진행 상태 노출.
+  const [isPending, startTransition] = useTransition();
 
   function go() {
     if (!other) return;
-    router.push(`/compare/${productSlug}/${other}`);
+    startTransition(() => {
+      router.push(`/compare/${productSlug}/${other}`);
+    });
   }
 
   if (others.length === 0) {
@@ -29,8 +34,9 @@ export function CompareSelector({
       <select
         value={other}
         onChange={(e) => setOther(e.target.value)}
+        disabled={isPending}
         aria-label="비교할 다른 제품 선택"
-        className="px-3 py-1.5 text-sm rounded-md border border-line bg-card text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        className="px-3 py-1.5 text-sm rounded-md border border-line bg-card text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-60"
       >
         <option value="">다른 제품과 비교…</option>
         {others.map((o) => (
@@ -41,11 +47,20 @@ export function CompareSelector({
       </select>
       <button
         onClick={go}
-        disabled={!other}
+        disabled={!other || isPending}
         aria-label="선택한 제품과 비교"
+        aria-busy={isPending}
         className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-semibold rounded-md bg-ink text-ivory hover:bg-ink/90 disabled:bg-stone-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
-        비교 <ArrowRight size={14} strokeWidth={2.2} aria-hidden />
+        {isPending ? (
+          <>
+            <Spinner size={14} /> 비교 중…
+          </>
+        ) : (
+          <>
+            비교 <ArrowRight size={14} strokeWidth={2.2} aria-hidden />
+          </>
+        )}
       </button>
     </div>
   );

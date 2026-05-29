@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Sparkles, CircleCheck, Library } from "lucide-react";
+import { Spinner } from "@/components/Spinner";
 
 type AskResult = {
   answer: string;
@@ -69,9 +70,16 @@ export function AskBox({
         <button
           onClick={send}
           disabled={loading || !query.trim()}
-          className="px-4 py-2 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          aria-busy={loading}
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          {loading ? "분석 중…" : "물어보기"}
+          {loading ? (
+            <>
+              <Spinner size={14} /> 분석 중…
+            </>
+          ) : (
+            "물어보기"
+          )}
         </button>
       </div>
 

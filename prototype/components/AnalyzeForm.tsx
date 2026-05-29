@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { Spinner } from "@/components/Spinner";
 
 type JobStatus = "pending" | "running" | "done" | "error";
 
@@ -132,10 +133,18 @@ export function AnalyzeForm() {
         <button
           type="submit"
           disabled={loading || !query.trim()}
+          aria-busy={loading}
           className="inline-flex items-center gap-1.5 px-5 py-3 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          {loading ? "분석 중…" : "분석 시작"}
-          {!loading && <ArrowRight size={15} strokeWidth={2.2} aria-hidden />}
+          {loading ? (
+            <>
+              <Spinner size={15} /> 분석 중…
+            </>
+          ) : (
+            <>
+              분석 시작 <ArrowRight size={15} strokeWidth={2.2} aria-hidden />
+            </>
+          )}
         </button>
       </div>
 
