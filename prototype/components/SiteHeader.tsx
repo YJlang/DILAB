@@ -1,37 +1,49 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { LayoutDashboard, Sparkles, Layers } from "lucide-react";
 
 const NAV = [
-  { href: "/dashboard", label: "대시보드", icon: "📊" },
-  { href: "/ask", label: "Ask", icon: "⚡" },
-  { href: "/topics", label: "토픽", icon: "🧩" },
+  { href: "/dashboard", label: "대시보드", Icon: LayoutDashboard },
+  { href: "/ask", label: "Ask", Icon: Sparkles },
+  { href: "/topics", label: "토픽", Icon: Layers },
 ];
 
 export function SiteHeader() {
+  const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-zinc-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-40 bg-ivory/85 backdrop-blur border-b border-line">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
         <Link
           href="/"
-          className="flex items-center gap-2 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-md"
           aria-label="DILAB 홈으로"
+          className="flex items-baseline gap-2 rounded-md hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          <span className="inline-flex w-8 h-8 rounded-md bg-indigo-600 text-white items-center justify-center font-bold">
-            D
+          <span className="font-display text-2xl leading-none text-ink">DILAB</span>
+          <span className="hidden sm:inline text-[11px] tracking-wide text-muted">
+            제품 평가 인텔리전스
           </span>
-          <span className="text-lg font-bold tracking-tight">DILAB</span>
         </Link>
+
         <nav aria-label="주요 메뉴" className="flex items-center gap-0.5 sm:gap-1">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="inline-flex items-center gap-1 min-h-[44px] px-2.5 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-            >
-              <span aria-hidden>{item.icon}</span>
-              <span className="hidden sm:inline">{item.label}</span>
-              <span className="sm:hidden">{item.label}</span>
-            </Link>
-          ))}
+          {NAV.map(({ href, label, Icon }) => {
+            const active = pathname === href || pathname.startsWith(href + "/");
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`inline-flex items-center gap-1.5 min-h-[44px] px-2.5 sm:px-3 py-2 rounded-md text-xs sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  active
+                    ? "bg-stone-100 text-ink font-semibold"
+                    : "text-ink-soft font-medium hover:bg-stone-50 hover:text-ink"
+                }`}
+              >
+                <Icon size={16} strokeWidth={2} aria-hidden />
+                <span>{label}</span>
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>

@@ -1,25 +1,28 @@
 @import "tailwindcss";
 
-/* DILAB 디자인 토큰 — DESIGN.md §3 기준. 라이트 모드 전용. */
-:root {
-  --color-bg: #FAFAF9;          /* zinc-50 */
-  --color-card: #FFFFFF;
-  --color-ink: #0F172A;          /* zinc-900 */
-  --color-ink-soft: #3F3F46;     /* zinc-700 — 보조 텍스트 */
-  --color-ink-mute: #71717A;     /* zinc-500 — 메타·캡션 */
-  --color-line: #E4E4E7;         /* zinc-200 */
+/* DILAB 디자인 토큰 v2.0 — DESIGN.md §3 (Research Editorial). 라이트 전용 warm ivory.
+   @theme 으로 의미 유틸 생성: bg-ivory / bg-card / text-ink / text-ink-soft /
+   text-muted / border-line / text-brand / bg-brand-soft / text-accent / bg-accent-soft / font-display.
+   sentiment 3색(positive/neutral/negative)은 Tailwind 기본 emerald-500/stone-400/rose-500 직접 사용. */
+@theme {
+  --color-ivory: #fbfaf7;
+  --color-card: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #44403c;
+  --color-muted: #78716c;
+  --color-line: #e7e5e4;
 
-  --color-primary: #4F46E5;      /* indigo-600 */
-  --color-primary-soft: #EEF2FF; /* indigo-50 */
-  --color-accent: #F59E0B;       /* amber-500 */
-  --color-positive: #10B981;     /* emerald-500 */
-  --color-neutral: #A1A1AA;      /* zinc-400 */
-  --color-negative: #F43F5E;     /* rose-500 */
+  --color-brand: #4338ca;
+  --color-brand-soft: #eef2ff;
+  --color-accent: #b45309;
+  --color-accent-soft: #fef3c7;
+
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
 }
 
 html,
 body {
-  background: var(--color-bg);
+  background: var(--color-ivory);
   color: var(--color-ink);
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
