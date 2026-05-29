@@ -1,3 +1,4 @@
+import { Sparkles, Route, Heart, Quote, Leaf } from "lucide-react";
 import { AskBox } from "@/components/AskBox";
 import { CitationCard } from "@/components/CitationCard";
 import { CompareSelector } from "@/components/CompareSelector";
@@ -69,13 +70,17 @@ export default async function ProductPage({
   const fetchedAt = new Date().toISOString().slice(0, 10);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-zinc-900">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       {/* 페이지 헤더 — 제품 정보 + 액션 */}
-      <header className="border-b border-zinc-200 pb-4 mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="border-b border-line pb-4 mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="text-xs text-zinc-500 mb-2">🌿 {domain.name}</div>
-          <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
-          <p className="text-sm text-zinc-500 mt-1">
+          <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
+            <Leaf size={14} strokeWidth={2} aria-hidden /> {domain.name}
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-ink">
+            {product.name}
+          </h1>
+          <p className="text-sm text-muted mt-1">
             {product.brand} · {product.category} ·{" "}
             <span className="tabular-nums">{fetchedAt} 분석</span>
           </p>
@@ -83,37 +88,37 @@ export default async function ProductPage({
         <div className="flex flex-wrap gap-2 items-center">
           <a
             href={`/ask?product=${slug}`}
-            className="text-sm px-3 py-1.5 rounded-md border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-brand/30 bg-brand-soft hover:bg-brand-soft/70 text-brand font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            ⚡ Ask
+            <Sparkles size={15} strokeWidth={2} aria-hidden /> Ask
           </a>
           <a
             href={`/journey/${slug}`}
-            className="text-sm px-3 py-1.5 rounded-md border border-amber-200 bg-amber-50/50 hover:bg-amber-100 text-amber-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+            className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-accent/30 bg-accent-soft/60 hover:bg-accent-soft text-accent font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            🗺️ 여정
+            <Route size={15} strokeWidth={2} aria-hidden /> 여정
           </a>
           <CompareSelector productSlug={slug} others={otherProducts} />
           <button
             type="button"
             aria-label="이 제품 저장"
-            className="text-sm px-3 py-1.5 rounded-md border border-zinc-200 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-line hover:bg-stone-50 text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            🤍 저장
+            <Heart size={15} strokeWidth={2} aria-hidden /> 저장
           </button>
         </div>
       </header>
 
       {/* 한 줄 결론 */}
       <section className="mb-5">
-        <div className="bg-amber-50/60 border-l-4 border-amber-500 rounded-md px-5 py-4">
-          <div className="text-xs font-semibold text-amber-700 mb-1 tracking-wide uppercase">
-            💬 한 줄 결론
+        <div className="bg-accent-soft/50 border-l-4 border-accent rounded-md px-5 py-4">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-accent mb-1 tracking-wide uppercase">
+            <Quote size={13} strokeWidth={2.2} aria-hidden /> 한 줄 결론
           </div>
-          <p className="text-[15px] leading-relaxed">
+          <p className="text-[15px] leading-relaxed text-ink">
             전문가 {expertCount}건 · 일반 사용자 {publicCount}명의 의견을 분석한 결과,
             종합 평점 <strong className="tabular-nums">{avgScore}/10</strong> 입니다.{" "}
-            아래 데이터로 자세히 살펴보세요. 👇
+            아래 데이터로 자세히 살펴보세요.
           </p>
         </div>
       </section>
@@ -123,27 +128,29 @@ export default async function ProductPage({
         {/* 좌측 2/3 */}
         <div className="lg:col-span-8 space-y-5">
           {/* 5축 레이더 */}
-          <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
+          <div className="bg-card rounded-xl border border-line p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-3">
-              <h2 className="text-base font-bold">이 제품의 5가지 강점·약점</h2>
-              <span className="text-xs text-zinc-500">
-                💡 카테고리 평균 7.0 점선 · 제품 점수 인디고
+              <h2 className="text-base font-bold text-ink">
+                이 제품의 5가지 강점·약점
+              </h2>
+              <span className="text-xs text-muted">
+                카테고리 평균 7.0 점선 · 제품 점수 강조색
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center">
               <RadarChart data={radarData} />
               <div className="space-y-3 text-sm">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-indigo-600 tabular-nums">
+                  <span className="font-display text-5xl text-brand tabular-nums leading-none">
                     {avgScore}
                   </span>
-                  <span className="text-zinc-500">/ 10 종합 점수</span>
+                  <span className="text-muted">/ 10 종합 점수</span>
                 </div>
                 <ul className="space-y-1.5 mt-3">
                   {radarData.map((d) => (
                     <li key={d.axis} className="flex justify-between gap-3">
-                      <span>{d.axis}</span>
-                      <span className="tabular-nums font-semibold text-indigo-600">
+                      <span className="text-ink-soft">{d.axis}</span>
+                      <span className="tabular-nums font-semibold text-brand">
                         {d.product.toFixed(1)}
                       </span>
                     </li>
@@ -155,8 +162,8 @@ export default async function ProductPage({
 
           {/* 감성 + 토픽 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
-              <h2 className="text-base font-bold mb-4">
+            <div className="bg-card rounded-xl border border-line p-5 shadow-sm">
+              <h2 className="text-base font-bold text-ink mb-4">
                 리뷰 {sentiments.length}개의 분위기
               </h2>
               <SentimentBars
@@ -167,8 +174,8 @@ export default async function ProductPage({
                 }}
               />
             </div>
-            <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
-              <h2 className="text-base font-bold mb-3">
+            <div className="bg-card rounded-xl border border-line p-5 shadow-sm">
+              <h2 className="text-base font-bold text-ink mb-3">
                 자주 말하는 키워드 ({uniqueKeywords.length})
               </h2>
               <TopicChips keywords={uniqueKeywords} />
@@ -188,9 +195,9 @@ export default async function ProductPage({
         <JourneyMap stages={stages} data={journeyByStage} />
       </section>
 
-      <footer className="mt-6 text-xs text-zinc-500">
-        🔍 모든 데이터는 Supabase 실시간 조회 · BGE-M3 임베딩 (Cloudflare
-        Workers AI) · DeepSeek 합성. 출처 청크는 평가·답변마다 추적돼요.
+      <footer className="mt-6 text-xs text-muted">
+        모든 데이터는 Supabase 실시간 조회 · BGE-M3 임베딩 (Cloudflare Workers AI)
+        · DeepSeek 합성. 출처 청크는 평가·답변마다 추적돼요.
       </footer>
     </main>
   );

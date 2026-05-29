@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Route } from "lucide-react";
 import {
   getDomain,
   getJourneyDetail,
@@ -35,17 +36,23 @@ export default async function JourneyPage({
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-      <header className="border-b border-zinc-200 pb-4 mb-5">
-        <div className="text-xs text-zinc-500 mb-2">🗺️ 사용자 여정 지도</div>
-        <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
-        <p className="text-sm text-zinc-500 mt-1">
+      <header className="border-b border-line pb-4 mb-5">
+        <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
+          <Route size={14} strokeWidth={2} aria-hidden /> 사용자 여정 지도
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-ink">
+          {product.name}
+        </h1>
+        <p className="text-sm text-muted mt-1">
           {product.brand} · 총 {totalChunks}건의 청크가 여정 단계에 매핑됨
         </p>
       </header>
 
       {/* 퍼널 */}
-      <section className="mb-5 bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
-        <h2 className="text-base font-bold mb-4">단계별 언급 + 감성 분포</h2>
+      <section className="mb-5 bg-card rounded-xl border border-line p-5 shadow-sm">
+        <h2 className="text-base font-bold text-ink mb-4">
+          단계별 언급 + 감성 분포
+        </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {stages.map((s, i) => {
             const items = grouped[s.key] ?? [];
@@ -58,39 +65,45 @@ export default async function JourneyPage({
             return (
               <div
                 key={s.key}
-                className={`rounded-md p-4 border ${
+                className={`rounded-lg p-4 border ${
                   isLast
-                    ? "bg-amber-50/50 border-amber-200"
-                    : "bg-zinc-50 border-zinc-200"
+                    ? "bg-accent-soft/50 border-accent/30"
+                    : "bg-stone-50 border-line"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span
                     className={`w-6 h-6 rounded-full text-white grid place-items-center text-xs font-bold ${
-                      isLast ? "bg-amber-500" : "bg-indigo-600"
+                      isLast ? "bg-accent" : "bg-brand"
                     }`}
                   >
                     {i + 1}
                   </span>
                   <span
                     className={`text-xs font-semibold ${
-                      isLast ? "text-amber-700" : "text-zinc-700"
+                      isLast ? "text-accent" : "text-ink-soft"
                     }`}
                   >
                     {s.label}
                   </span>
                 </div>
-                <div className="text-2xl font-bold tabular-nums">{n}</div>
-                <div className="text-xs text-zinc-500">건 언급</div>
+                <div className="font-display text-3xl text-ink tabular-nums leading-tight">
+                  {n}
+                </div>
+                <div className="text-xs text-muted">건 언급</div>
                 <div className="flex gap-1 mt-3 text-xs">
-                  <span className="text-indigo-600 font-semibold">
+                  <span className="text-emerald-700 font-semibold">
                     😊 {posPct}%
                   </span>
                   {neu > 0 && (
-                    <span className="text-zinc-500">😐 {Math.round((neu/n)*100)}%</span>
+                    <span className="text-muted">
+                      😐 {Math.round((neu / n) * 100)}%
+                    </span>
                   )}
                   {neg > 0 && (
-                    <span className="text-zinc-500">😣 {Math.round((neg/n)*100)}%</span>
+                    <span className="text-muted">
+                      😣 {Math.round((neg / n) * 100)}%
+                    </span>
                   )}
                 </div>
               </div>
@@ -114,14 +127,11 @@ export default async function JourneyPage({
         })}
       </section>
 
-      <footer className="mt-6 flex items-center justify-between text-xs text-zinc-500">
+      <footer className="mt-6 flex items-center justify-between text-xs text-muted">
         <span>
           * LLM zero-shot 분류 — 정확도 약 80%. 청크 내 시점 단서를 추정한 결과예요.
         </span>
-        <Link
-          href={`/products/${slug}`}
-          className="text-indigo-600 hover:underline"
-        >
+        <Link href={`/products/${slug}`} className="text-brand hover:underline">
           ← 리포트로 돌아가기
         </Link>
       </footer>
@@ -139,46 +149,44 @@ function StageDetail({
   chunks: JourneyChunkDetail[];
 }) {
   return (
-    <div className="bg-white rounded-lg border border-zinc-200 p-5 shadow-sm">
+    <div className="bg-card rounded-xl border border-line p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
-        <span className="w-6 h-6 rounded-full bg-indigo-600 text-white grid place-items-center text-xs font-bold">
+        <span className="w-6 h-6 rounded-full bg-brand text-white grid place-items-center text-xs font-bold">
           {order}
         </span>
-        <h3 className="text-base font-bold">{label}</h3>
-        <span className="text-xs text-zinc-500">— {chunks.length}건</span>
+        <h3 className="text-base font-bold text-ink">{label}</h3>
+        <span className="text-xs text-muted">— {chunks.length}건</span>
       </div>
       {chunks.length === 0 ? (
-        <p className="text-sm text-zinc-500 italic">이 단계는 비어 있어요.</p>
+        <p className="text-sm text-muted italic">이 단계는 비어 있어요.</p>
       ) : (
         <div className="space-y-2.5 max-h-80 overflow-auto">
           {chunks.slice(0, 8).map((c) => (
             <div
               key={c.chunk_id}
-              className="px-3 py-2.5 rounded-md bg-zinc-50 border border-zinc-100"
+              className="px-3 py-2.5 rounded-md bg-stone-50 border border-stone-100"
             >
               <div className="flex items-center gap-2 text-xs mb-1">
                 <span>{SENTIMENT_EMOJI[c.sentiment]}</span>
                 <span
                   className={`font-semibold ${
-                    c.source_type === "expert"
-                      ? "text-indigo-600"
-                      : "text-amber-700"
+                    c.source_type === "expert" ? "text-brand" : "text-accent"
                   }`}
                 >
                   {c.source_type === "expert" ? "전문가" : "사용자"}
                 </span>
-                <span className="text-zinc-500">{c.author ?? "익명"}</span>
-                <span className="text-zinc-500 ml-auto">
+                <span className="text-muted">{c.author ?? "익명"}</span>
+                <span className="text-muted ml-auto">
                   conf {c.confidence.toFixed(2)}
                 </span>
               </div>
-              <p className="text-xs text-zinc-700 leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 {c.text.length > 200 ? c.text.slice(0, 200) + "…" : c.text}
               </p>
             </div>
           ))}
           {chunks.length > 8 && (
-            <p className="text-xs text-zinc-500 text-center pt-1">
+            <p className="text-xs text-muted text-center pt-1">
               + {chunks.length - 8}건 더 있음
             </p>
           )}
