@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 export function CompareSelector({
   productSlug,
@@ -19,9 +20,7 @@ export function CompareSelector({
 
   if (others.length === 0) {
     return (
-      <span className="text-xs text-zinc-500">
-        비교할 다른 제품이 아직 없어요
-      </span>
+      <span className="text-xs text-muted">비교할 다른 제품이 아직 없어요</span>
     );
   }
 
@@ -31,9 +30,9 @@ export function CompareSelector({
         value={other}
         onChange={(e) => setOther(e.target.value)}
         aria-label="비교할 다른 제품 선택"
-        className="px-3 py-1.5 text-sm rounded-md border border-zinc-200 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+        className="px-3 py-1.5 text-sm rounded-md border border-line bg-card text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
-        <option value="">⚖️ 다른 제품과 비교…</option>
+        <option value="">다른 제품과 비교…</option>
         {others.map((o) => (
           <option key={o.slug} value={o.slug}>
             {o.name.length > 35 ? o.name.slice(0, 35) + "…" : o.name}
@@ -43,9 +42,10 @@ export function CompareSelector({
       <button
         onClick={go}
         disabled={!other}
-        className="px-3 py-1.5 text-sm font-medium rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+        aria-label="선택한 제품과 비교"
+        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-semibold rounded-md bg-ink text-ivory hover:bg-ink/90 disabled:bg-stone-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
-        비교 ▶
+        비교 <ArrowRight size={14} strokeWidth={2.2} aria-hidden />
       </button>
     </div>
   );

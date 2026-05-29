@@ -1,3 +1,5 @@
+import { Route } from "lucide-react";
+
 type Stage = {
   key: string;
   label: string;
@@ -18,9 +20,11 @@ export function JourneyMap({
 }) {
   const sorted = [...stages].sort((a, b) => a.order - b.order);
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+    <div className="rounded-xl border border-line bg-card p-5 shadow-sm">
       <div className="flex items-baseline justify-between mb-4">
-        <h2 className="text-base font-bold">🗺️ 사람들의 구매·사용 여정</h2>
+        <h2 className="flex items-center gap-1.5 text-base font-bold text-ink">
+          <Route size={16} strokeWidth={2} aria-hidden /> 사람들의 구매·사용 여정
+        </h2>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {sorted.map((s, i) => {
@@ -29,31 +33,31 @@ export function JourneyMap({
           return (
             <div
               key={s.key}
-              className={`rounded-md p-4 border ${
+              className={`rounded-lg p-4 border ${
                 isHighlight
-                  ? "bg-amber-50/50 border-amber-200"
-                  : "bg-zinc-50 border-zinc-200"
+                  ? "bg-accent-soft/50 border-accent/30"
+                  : "bg-stone-50 border-line"
               }`}
             >
               <div className="flex items-center gap-2 mb-2">
                 <span
                   className={`w-6 h-6 rounded-full text-white grid place-items-center text-xs font-bold ${
-                    isHighlight ? "bg-amber-500" : "bg-indigo-600"
+                    isHighlight ? "bg-accent" : "bg-brand"
                   }`}
                 >
                   {i + 1}
                 </span>
                 <span
                   className={`text-xs font-semibold ${
-                    isHighlight ? "text-amber-700" : "text-zinc-700"
+                    isHighlight ? "text-accent" : "text-ink-soft"
                   }`}
                 >
                   {s.label}
                 </span>
               </div>
               <div className="flex items-center justify-between mt-3 text-xs">
-                <span className="text-zinc-500">
-                  <span className="font-semibold text-zinc-900 tabular-nums">
+                <span className="text-muted">
+                  <span className="font-semibold text-ink tabular-nums">
                     {d?.n ?? 0}명
                   </span>{" "}
                   언급
@@ -61,8 +65,8 @@ export function JourneyMap({
                 <span
                   className={`tabular-nums font-semibold ${
                     (d?.positive_pct ?? 0) >= 70
-                      ? "text-indigo-600"
-                      : "text-zinc-500"
+                      ? "text-emerald-700"
+                      : "text-muted"
                   }`}
                 >
                   😊 {d?.positive_pct ?? 0}%
@@ -72,7 +76,7 @@ export function JourneyMap({
           );
         })}
       </div>
-      <p className="text-[11px] text-zinc-500 italic mt-3">
+      <p className="text-[11px] text-muted italic mt-3">
         * LLM zero-shot 추정 (정확도 약 80%) — 정확한 분류가 아닌 경향 참고용
       </p>
     </div>

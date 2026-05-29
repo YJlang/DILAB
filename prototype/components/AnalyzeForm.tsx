@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 type JobStatus = "pending" | "running" | "done" | "error";
 
@@ -126,14 +127,15 @@ export function AnalyzeForm() {
           placeholder='제품명 입력 — 예: "닥터지 레드 블레미쉬 크림"'
           disabled={loading}
           aria-label="분석할 제품명 입력"
-          className="flex-1 px-4 py-3 text-sm rounded-md border border-zinc-200 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:bg-zinc-50"
+          className="flex-1 px-4 py-3 text-sm rounded-md border border-line bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:bg-stone-50"
         />
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="px-5 py-3 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          className="inline-flex items-center gap-1.5 px-5 py-3 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          {loading ? "분석 중…" : "분석 시작 ▶"}
+          {loading ? "분석 중…" : "분석 시작"}
+          {!loading && <ArrowRight size={15} strokeWidth={2.2} aria-hidden />}
         </button>
       </div>
 
@@ -144,7 +146,7 @@ export function AnalyzeForm() {
             type="button"
             onClick={() => setQuery(q)}
             disabled={loading}
-            className="text-xs px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 disabled:opacity-50"
+            className="text-xs px-2.5 py-1 rounded-full bg-stone-100 hover:bg-stone-200 text-ink-soft disabled:opacity-50"
           >
             {q}
           </button>
@@ -152,24 +154,24 @@ export function AnalyzeForm() {
       </div>
 
       {loading && progress && (
-        <div className="text-sm text-zinc-700 bg-indigo-50/50 border border-indigo-100 rounded-md px-4 py-3">
+        <div className="text-sm text-ink-soft bg-brand-soft border border-brand/20 rounded-md px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
+            <span className="inline-block w-2 h-2 bg-brand rounded-full animate-pulse" />
             <span className="font-medium">{progress.message ?? "처리 중…"}</span>
             {progress.step != null && progress.of_steps != null && (
-              <span className="ml-auto text-xs text-zinc-500">
+              <span className="ml-auto text-xs text-muted">
                 {progress.step}/{progress.of_steps}
               </span>
             )}
           </div>
-          <div className="text-xs text-zinc-500 mt-1.5">
+          <div className="text-xs text-muted mt-1.5">
             Modal 서버리스 함수가 백그라운드 처리 중 · 약 60~120초 소요 · 첫 실행은 모델 다운로드로 +30초
           </div>
         </div>
       )}
 
       {error && (
-        <p className="text-sm text-zinc-700 bg-zinc-50 border border-zinc-200 px-4 py-3 rounded-md whitespace-pre-wrap">
+        <p className="text-sm text-ink-soft bg-stone-50 border border-line px-4 py-3 rounded-md whitespace-pre-wrap">
           ⚠️ {error}
         </p>
       )}

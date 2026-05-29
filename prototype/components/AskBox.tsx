@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Sparkles, CircleCheck, Library } from "lucide-react";
 
 type AskResult = {
   answer: string;
@@ -52,8 +53,10 @@ export function AskBox({
   }
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
-      <h2 className="text-base font-bold mb-3">⚡ 직접 물어보세요</h2>
+    <div className="rounded-xl border border-line bg-card p-5 shadow-sm">
+      <h2 className="flex items-center gap-1.5 text-base font-bold text-ink mb-3">
+        <Sparkles size={16} strokeWidth={2} aria-hidden /> 직접 물어보세요
+      </h2>
       <div className="flex gap-2 mb-3">
         <input
           value={query}
@@ -61,12 +64,12 @@ export function AskBox({
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder='예: "민감성 피부에 괜찮나요?"'
           aria-label="질문 입력"
-          className="flex-1 px-3 py-2 text-sm rounded-md border border-zinc-200 bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          className="flex-1 px-3 py-2 text-sm rounded-md border border-line bg-stone-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         />
         <button
           onClick={send}
           disabled={loading || !query.trim()}
-          className="px-4 py-2 text-sm font-medium rounded-md bg-indigo-600 text-white disabled:bg-zinc-300 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          className="px-4 py-2 text-sm font-semibold rounded-md bg-ink text-ivory disabled:bg-stone-300 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           {loading ? "분석 중…" : "물어보기"}
         </button>
@@ -82,7 +85,7 @@ export function AskBox({
           <button
             key={q}
             onClick={() => setQuery(q)}
-            className="text-xs px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
+            className="text-xs px-2.5 py-1 rounded-full bg-stone-100 hover:bg-stone-200 text-ink-soft"
           >
             {q}
           </button>
@@ -90,42 +93,45 @@ export function AskBox({
       </div>
 
       {error && (
-        <p className="text-sm text-zinc-500 bg-zinc-50 p-3 rounded-md">⚠️ {error}</p>
+        <p className="text-sm text-muted bg-stone-50 p-3 rounded-md">⚠️ {error}</p>
       )}
 
       {result && (
         <div className="space-y-3 mt-3">
-          <div className="rounded-md border border-zinc-200 bg-zinc-50/40 p-3">
-            <div className="text-xs font-semibold text-zinc-500 mb-1">💡 답변</div>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="rounded-md border border-line bg-stone-50/40 p-3">
+            <div className="text-xs font-semibold text-muted mb-1">답변</div>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap text-ink">
               {result.answer}
             </p>
           </div>
-          <div className="rounded-md border border-amber-200 bg-amber-50/50 p-3">
-            <div className="text-xs font-semibold text-amber-700 mb-1">✅ 추천</div>
-            <p className="text-sm">{result.recommendation}</p>
+          <div className="rounded-md border border-accent/30 bg-accent-soft/50 p-3">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-accent mb-1">
+              <CircleCheck size={13} strokeWidth={2.2} aria-hidden /> 추천
+            </div>
+            <p className="text-sm text-ink">{result.recommendation}</p>
           </div>
-          <div className="text-xs text-zinc-500">
-            📚 전문가 {result.expert_count}건 · 일반 {result.public_count}건 ·{" "}
+          <div className="flex items-center gap-1.5 text-xs text-muted">
+            <Library size={13} strokeWidth={2} aria-hidden /> 전문가{" "}
+            {result.expert_count}건 · 일반 {result.public_count}건 ·{" "}
             {result.latency_ms}ms
           </div>
           <div className="space-y-1.5">
             {result.citations.map((c) => (
               <div
                 key={c.rank}
-                className="text-xs px-3 py-2 rounded-md bg-zinc-50 border border-zinc-100"
+                className="text-xs px-3 py-2 rounded-md bg-stone-50 border border-stone-100"
               >
                 <span
                   className={`font-semibold ${
-                    c.cite_type === "expert" ? "text-indigo-600" : "text-amber-700"
+                    c.cite_type === "expert" ? "text-brand" : "text-accent"
                   }`}
                 >
                   [{c.rank}] {c.cite_type}
                 </span>{" "}
-                <span className="text-zinc-500">
+                <span className="text-muted">
                   sim={c.similarity.toFixed(3)} · {c.author}
                 </span>
-                <p className="mt-1 text-zinc-700">{c.text.slice(0, 180)}…</p>
+                <p className="mt-1 text-ink-soft">{c.text.slice(0, 180)}…</p>
               </div>
             ))}
           </div>
