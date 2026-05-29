@@ -2,9 +2,11 @@
 
 > 이 파일은 Claude Code 가 자동으로 읽는 **디자인 규칙** 입니다. `CLAUDE.md` 가 *프로젝트 정체성·정책* 이라면, 이 파일은 *시각·UI 의 헌법*. 모든 디자인·리팩토링 작업은 이 규칙을 우선합니다.
 >
-> **AS_OF**: 2026-05-28
-> **상태**: v1.0 (vibe coding → 실서비스 정제 단계의 기준선)
+> **AS_OF**: 2026-05-30
+> **상태**: v2.0 (Research Editorial 리디자인 — SaaS 정식 서비스 기준선)
 > **적용 범위**: `prototype/` (Next.js 16 + Tailwind 4 + Recharts)
+>
+> **v2.0 비주얼 방향**: *Research Editorial* — 애널리스트 리포트 감성. warm ivory surface + deep ink, 영문 serif 디스플레이 + 한글 Pretendard 본문, 절제된 데이터 컬러. "전문가급 신뢰성" 포지셔닝과 1:1. 레퍼런스(시각 모방 아님): Stripe·Mixpanel·Amplitude 류의 *editorial data* 톤. **싱클리 시각 모방 금지(§1.1)는 v1.0과 동일하게 유효.**
 
 ---
 
@@ -38,43 +40,51 @@
 |---|---|
 | 프레임워크 | Next.js 16 (App Router, Server Components 우선) |
 | 스타일링 | Tailwind CSS 4 (`@import "tailwindcss"`, PostCSS 통합) |
-| 폰트 | Pretendard (jsdelivr CDN) — 한국어 우선, fallback Apple SD/Noto Sans KR |
+| 폰트 (본문) | **Pretendard** (jsdelivr CDN) — 한/영 본문·UI 전체. fallback Apple SD/Noto Sans KR |
+| 폰트 (디스플레이) | **Instrument Serif** (영문·숫자 한정) — hero·페이지 타이틀의 영문/워드마크/수치. 한글 헤드라인은 Pretendard semibold 유지 (한글 serif 미사용 — 가독성·로딩 비용) |
 | 차트 | Recharts 3.x (Radar / Bar 위주) |
-| 컬러 모드 | **라이트 전용** (다크모드 명시 제거됨, `prefers-color-scheme: dark` 미사용) |
-| 아이콘 | 이모지 인라인 (📊 ⚡ 🧩 🗺️ ⚖️). 외부 아이콘 라이브러리 미도입 — 도입 시 lucide-react 권장 |
+| 컬러 모드 | **라이트 전용** — warm ivory 베이스 (`#FBFAF7`). 다크모드·`prefers-color-scheme: dark` 미사용 |
+| 아이콘 | **lucide-react** (SVG, stroke 1.5~2). 이모지 아이콘 폐기 — `no-emoji-icons` 준수. 본문 내 의미 이모지(😊 감성)는 데이터 표현으로 허용 |
 
 ---
 
 ## 3. 디자인 토큰 (기준선 v1)
 
-### 3.1 컬러
-| 역할 | Tailwind 클래스 | Hex (참고) |
-|---|---|---|
-| 페이지 배경 | `bg-zinc-50` | `#FAFAF9` |
-| 카드 / 컨테이너 | `bg-white` | `#FFFFFF` |
-| 본문 텍스트 | `text-zinc-900` | `#0F172A` |
-| 보조 텍스트 | `text-zinc-700` (강) / `text-zinc-500` (약) | — |
-| 보더 (가벼움) | `border-zinc-200` | `#E4E4E7` |
-| Primary (브랜드·CTA) | `bg-indigo-600` / `text-indigo-700` / `bg-indigo-50` | — |
-| Accent (강조·하이라이트) | `bg-amber-500` / `text-amber-700` *(머스타드 계열)* | — |
-| Positive (긍정 감성) | `bg-emerald-500` / `text-emerald-700` | — |
-| Neutral (중립 감성) | `bg-zinc-400` / `text-zinc-600` | — |
-| Negative (부정 감성) | `bg-rose-500` / `text-rose-700` | — |
+### 3.1 컬러 (v2.0 — warm editorial)
 
+회색 계열을 **zinc → stone**(warm) 으로 통일. `globals.css` 의 `@theme` 에 의미 토큰을 정의하고, 의미 유틸(`bg-ivory` `text-ink` `border-line` `text-muted`)을 우선 사용. Tailwind 기본 stone/emerald/rose 병용 허용.
+
+| 역할 | 의미 토큰 / Tailwind 클래스 | Hex |
+|---|---|---|
+| 페이지 배경 | `bg-ivory` *(=stone 계열 warm)* | `#FBFAF7` |
+| 카드 / 컨테이너 | `bg-card` *(white)* | `#FFFFFF` |
+| 본문 텍스트 | `text-ink` | `#1A1A1A` |
+| 보조 텍스트 | `text-ink-soft` (강, stone-700) / `text-muted` (약, stone-500) | `#44403C` / `#78716C` |
+| 보더 (가벼움) | `border-line` *(stone-200)* | `#E7E5E4` |
+| **CTA (1차 액션)** | `bg-ink text-ivory` *(editorial 검정 버튼)* | `#1A1A1A` / `#FBFAF7` |
+| **Brand (링크·강조)** | `text-brand` / `bg-brand-soft` *(indigo-700/50)* | `#4338CA` |
+| Accent (하이라이트·한줄결론) | `text-accent` / `bg-accent-soft` *(amber-700/50, clay)* | `#B45309` |
+| Positive (긍정 감성) | `bg-emerald-500` / `text-emerald-700` | `#10B981` |
+| Neutral (중립 감성) | `bg-stone-400` / `text-stone-600` | `#A8A29E` |
+| Negative (부정 감성) | `bg-rose-500` / `text-rose-700` | `#F43F5E` |
+
+> 1차 CTA 는 **ink 검정 버튼** (editorial 표준), 링크·인터랙티브 강조는 **brand indigo**, 하이라이트는 **accent clay** 로 역할 분리. sentiment 3색(emerald/stone/rose)은 v1.0 의미 토큰 유지.
 > 새 컬러 도입 시 *반드시* 이 표에 추가하고 사용 위치(역할)를 명시할 것. 임의 hex 인라인 금지.
 
 ### 3.2 타이포 (Tailwind 기본 scale 기반)
 
 | 용도 | 클래스 | px |
 |---|---|---|
-| H1 (페이지 타이틀) | `text-3xl font-bold tracking-tight` *(모바일 `text-2xl`)* | 30/24 |
+| Display (hero 영문·수치) | `font-display` (=Instrument Serif) `text-5xl~7xl` | 48~72 |
+| H1 (페이지 타이틀) | `text-3xl font-bold tracking-tight` *(모바일 `text-2xl`)*. 영문/수치 토큰은 `font-display` 가능 | 30/24 |
 | H2 (섹션) | `text-xl font-semibold` | 20 |
 | H3 (서브섹션) | `text-base font-semibold` | 16 |
 | 본문 | `text-base` (=16) 또는 `text-sm` (=14, 보조) | 16/14 |
-| 캡션·메타 | `text-xs text-zinc-500` | 12 |
-| 숫자 (점수·통계) | `font-variant-numeric: tabular-nums` (이미 globals.css 에 적용) | — |
+| 캡션·메타 | `text-xs text-muted` | 12 |
+| 숫자 (점수·통계) | `font-variant-numeric: tabular-nums` (globals.css 적용). 큰 수치는 `font-display` serif 허용 | — |
 
 > 행 높이는 `leading-relaxed` (1.625) 기본, 헤딩만 `leading-tight`.
+> **`font-display`(serif) 는 영문·숫자 한정.** 한글 헤드라인은 Pretendard `font-semibold`/`font-bold` 유지 — 한·영 혼용 헤드라인은 영문 토큰만 `<span className="font-display">` 로 감싼다.
 
 ### 3.3 간격 (4/8 px grid, Tailwind 기본 scale)
 
@@ -244,3 +254,4 @@
 | 일자 | 변경 |
 |---|---|
 | 2026-05-28 | v1.0 — 초안 (vibe coding → 실서비스 정제 단계의 기준선). 토큰·반응형·정보 위계·skill 트리거 정의. |
+| 2026-05-30 | v2.0 — **Research Editorial 리디자인**. SaaS 정식 서비스 전환: ① warm ivory 베이스 + deep ink 토큰(§3.1), ② Instrument Serif 영문 디스플레이 폰트(§2·§3.2), ③ lucide-react SVG 아이콘(§2), ④ 회색 zinc→stone, CTA=ink 검정 버튼/링크=brand indigo/하이라이트=accent clay 역할 분리. 신규 마케팅 랜딩(`app/page.tsx`) 추가. **데이터 계약·백엔드 매핑 무손상(§11)·싱클리 모방 금지(§1.1) 유지.** |
