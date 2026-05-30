@@ -110,7 +110,7 @@ def analyze_product_task(job_id: str, product_query: str, domain_slug: str) -> N
             progress={
                 "step": 1,
                 "of_steps": 3,
-                "message": "분석 시작 — 네이버 수집 + BGE-M3 임베딩 + DeepSeek 라벨링 (약 60~120초)",
+                "message": "분석 시작 — 후기 수집 + AI 의미 분석 + 생성형 AI 평가 (약 60~120초)",
             },
         )
 
@@ -129,7 +129,7 @@ def analyze_product_task(job_id: str, product_query: str, domain_slug: str) -> N
                 "step": 3,
                 "of_steps": 3,
                 "message": (
-                    f"완료 — {result.get('documents_added', 0)} documents · "
+                    f"완료 — {result.get('documents_added', 0)}건 수집 · "
                     f"{result.get('elapsed_sec', 0)}초"
                 ),
             },
