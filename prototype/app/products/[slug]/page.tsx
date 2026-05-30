@@ -196,8 +196,8 @@ export default async function ProductPage({
       </section>
 
       <footer className="mt-6 text-xs text-muted">
-        모든 데이터는 Supabase 실시간 조회 · BGE-M3 임베딩 (Cloudflare Workers AI)
-        · DeepSeek 합성. 출처 청크는 평가·답변마다 추적돼요.
+        모든 데이터는 실시간 반영 · AI 의미 분석 · 생성형 AI 리포트. 근거 구절은
+        평가·답변마다 추적돼요.
       </footer>
     </main>
   );

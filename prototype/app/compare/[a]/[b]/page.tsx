@@ -168,8 +168,7 @@ export default async function ComparePage({
 
       <footer className="mt-6 flex items-center justify-between text-xs text-muted">
         <span>
-          {data.llm_model} 합성 · 모든 데이터는 Supabase 실시간 조회 · 5축 점수는
-          chunks 의 분류 × 감성 가중 평균
+          생성형 AI 합성 · 실시간 데이터 · 5축 점수는 근거별 감성 가중 평균
         </span>
         <div className="flex gap-3">
           <Link href={`/products/${a}`} className="text-brand hover:underline">

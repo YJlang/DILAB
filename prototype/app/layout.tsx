@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "DILAB — 질로 답하는 제품 평가",
   description:
-    "전문가 리뷰 DB + 공개 리뷰를 함께 분석해 *어디서 가져온 결론인지* 매번 보여주는 도메인 특화 RAG 제품 평가 서비스.",
+    "전문가 리뷰 DB + 공개 리뷰를 함께 분석해 *어디서 가져온 결론인지* 매번 보여주는 출처 추적형 제품 평가 서비스.",
 };
 
 export default function RootLayout({

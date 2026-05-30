@@ -77,7 +77,7 @@ export function JourneyMap({
         })}
       </div>
       <p className="text-[11px] text-muted italic mt-3">
-        * LLM zero-shot 추정 (정확도 약 80%) — 정확한 분류가 아닌 경향 참고용
+        * AI 자동 추정 (정확도 약 80%) — 정확한 분류가 아닌 경향 참고용
       </p>
     </div>
   );

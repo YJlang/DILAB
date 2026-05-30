@@ -44,7 +44,7 @@ export default async function JourneyPage({
           {product.name}
         </h1>
         <p className="text-sm text-muted mt-1">
-          {product.brand} · 총 {totalChunks}건의 청크가 여정 단계에 매핑됨
+          {product.brand} · 총 {totalChunks}건의 근거가 여정 단계에 매핑됨
         </p>
       </header>
 
@@ -129,7 +129,7 @@ export default async function JourneyPage({
 
       <footer className="mt-6 flex items-center justify-between text-xs text-muted">
         <span>
-          * LLM zero-shot 분류 — 정확도 약 80%. 청크 내 시점 단서를 추정한 결과예요.
+          * AI 자동 분류 — 참고용 추정값(약 80%). 후기 속 시점 단서를 추정한 결과예요.
         </span>
         <Link href={`/products/${slug}`} className="text-brand hover:underline">
           ← 리포트로 돌아가기

@@ -174,7 +174,7 @@ export function AnalyzeForm() {
             )}
           </div>
           <div className="text-xs text-muted mt-1.5">
-            Modal 서버리스 함수가 백그라운드 처리 중 · 약 60~120초 소요 · 첫 실행은 모델 다운로드로 +30초
+            클라우드 분석 엔진이 백그라운드에서 처리 중 · 약 60~120초 소요 · 첫 실행은 준비로 +30초
           </div>
         </div>
       )}

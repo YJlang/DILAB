@@ -42,9 +42,9 @@ export default async function DashboardPage({
       {/* KPI */}
       <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-5">
         <Kpi label="제품" n={stats.counts.products} hint="분석 완료" />
-        <Kpi label="documents" n={stats.counts.documents} hint="reviews + expert" />
-        <Kpi label="chunks" n={stats.counts.chunks} hint="BGE-M3 임베딩" />
-        <Kpi label="토픽" n={stats.counts.topics} hint="BERTopic 분리" />
+        <Kpi label="수집 자료" n={stats.counts.documents} hint="후기 + 전문가" />
+        <Kpi label="근거 구절" n={stats.counts.chunks} hint="AI 의미 분석" />
+        <Kpi label="토픽" n={stats.counts.topics} hint="AI 주제 분류" />
         <Kpi
           label="Ask 호출"
           n={stats.counts.ask_queries}
@@ -188,9 +188,8 @@ export default async function DashboardPage({
       </section>
 
       <footer className="mt-6 text-xs text-muted">
-        모든 데이터는 Supabase 실시간 조회 · 도메인 정의(categories / rating_axes /
-        journey_stages)는 <code>domains.metadata</code> JSONB · 도메인 추가 시 모든
-        화면 자동 따라옴
+        모든 데이터는 실시간으로 반영돼요 · 새 도메인을 추가하면 모든 화면이 자동으로
+        따라옵니다.
       </footer>
     </main>
   );

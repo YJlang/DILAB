@@ -42,7 +42,7 @@ export default function Home() {
             </div>
 
             <p className="mt-4 text-xs text-muted">
-              분석은 약 60~120초 · 가입 없이 바로 체험 · 출처 청크까지 공개
+              분석은 약 60~120초 · 가입 없이 바로 체험 · 근거 구절까지 공개
             </p>
           </div>
 
@@ -57,9 +57,9 @@ export default function Home() {
       <section className="border-y border-line bg-card/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-4 text-center">
           <TrustStat value="전문가 + 공개" label="이중 출처 분석" />
-          <TrustStat value="100%" label="결론마다 출처 청크" />
+          <TrustStat value="100%" label="결론마다 근거 구절" />
           <TrustStat value="5축" label="정량 평가 점수" />
-          <TrustStat value="BGE-M3" label="다국어 임베딩 RAG" />
+          <TrustStat value="근거 추적" label="AI 의미 분석" />
         </div>
       </section>
 
@@ -73,8 +73,8 @@ export default function Home() {
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
           <ValueCard
             Icon={FileSearch}
-            title="출처 추적 RAG"
-            desc="모든 답변·점수 옆에 근거가 된 리뷰 청크를 함께 표시해요. 클릭 한 번이면 원문이 펼쳐집니다."
+            title="출처 추적 분석"
+            desc="모든 답변·점수 옆에 근거가 된 리뷰 구절을 함께 표시해요. 클릭 한 번이면 원문이 펼쳐집니다."
           />
           <ValueCard
             Icon={Radar}
@@ -102,13 +102,13 @@ export default function Home() {
               n={1}
               Icon={Search}
               title="수집"
-              desc="공개 후기와 전문가 글을 자동 수집해 청크로 나눠요."
+              desc="공개 후기와 전문가 글을 자동 수집해 분석 단위로 정리해요."
             />
             <StepCard
               n={2}
               Icon={Cpu}
-              title="임베딩"
-              desc="BGE-M3로 벡터화해 의미 단위로 검색 가능하게 만들어요."
+              title="의미 분석"
+              desc="AI가 의미 단위로 검색 가능하게 정리해요."
             />
             <StepCard
               n={3}
@@ -120,7 +120,7 @@ export default function Home() {
               n={4}
               Icon={FileText}
               title="리포트"
-              desc="DeepSeek가 출처를 인용하며 평가 리포트로 합성해요."
+              desc="생성형 AI가 출처를 인용하며 평가 리포트로 만들어요."
             />
           </ol>
         </div>
@@ -140,13 +140,13 @@ export default function Home() {
             </h2>
             <p className="mt-4 text-base text-ink-soft leading-relaxed">
               일반 리뷰 요약은 &ldquo;많은 사람이 좋대요&rdquo;에서 멈춰요. DILAB은
-              전문가 리뷰 DB를 벡터로 결합해, 공개 후기의 감성을{" "}
+              전문가 리뷰 DB를 AI로 결합해, 공개 후기의 감성을{" "}
               <em className="not-italic text-ink font-medium">전문가 관점으로</em>{" "}
               교차검증합니다. 그래서 결론마다 &ldquo;왜&rdquo;가 따라붙어요.
             </p>
           </div>
           <ul className="space-y-3">
-            <DiffRow text="모든 결론에 evidence chunk가 붙어 신뢰성을 검증할 수 있어요." />
+            <DiffRow text="모든 결론에 근거 구절이 붙어 신뢰성을 검증할 수 있어요." />
             <DiffRow text="전문가 DB + 공개 후기를 한 화면에서 비교해요." />
             <DiffRow text="감성을 색이 아니라 점수·근거로 설명해요." />
             <DiffRow text="제품 간 5축 비교로 자사·경쟁사 포지션을 한눈에 봐요." />
@@ -327,7 +327,7 @@ function ReportPreview() {
 
         <div className="mt-5 pt-4 border-t border-line">
           <div className="flex items-center gap-2 mb-2 text-xs text-muted">
-            <Quote size={13} strokeWidth={2} aria-hidden /> 근거 청크
+            <Quote size={13} strokeWidth={2} aria-hidden /> 근거 구절
           </div>
           <div className="flex flex-wrap gap-1.5">
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-brand-soft text-brand">

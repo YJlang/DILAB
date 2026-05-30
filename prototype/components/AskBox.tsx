@@ -120,8 +120,7 @@ export function AskBox({
           </div>
           <div className="flex items-center gap-1.5 text-xs text-muted">
             <Library size={13} strokeWidth={2} aria-hidden /> 전문가{" "}
-            {result.expert_count}건 · 일반 {result.public_count}건 ·{" "}
-            {result.latency_ms}ms
+            {result.expert_count}건 · 일반 {result.public_count}건 · 생성형 AI
           </div>
           <div className="space-y-1.5">
             {result.citations.map((c) => (
@@ -134,7 +133,7 @@ export function AskBox({
                     c.cite_type === "expert" ? "text-brand" : "text-accent"
                   }`}
                 >
-                  [{c.rank}] {c.cite_type}
+                  [{c.rank}] {c.cite_type === "expert" ? "전문가" : "일반"}
                 </span>{" "}
                 <span className="text-muted">
                   sim={c.similarity.toFixed(3)} · {c.author}

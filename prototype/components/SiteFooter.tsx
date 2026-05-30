@@ -6,11 +6,11 @@ export function SiteFooter() {
         <div className="flex items-center justify-center sm:justify-start gap-2">
           <span className="font-display text-lg leading-none text-ink">DILAB</span>
           <span className="text-xs text-muted">
-            © {year} · INCLab
+            © {year} · DILAB
           </span>
         </div>
         <span className="text-xs text-muted">
-          BGE-M3 임베딩 · LLM 합성 · Modal 분석 큐 · 출처 추적 RAG
+          AI 의미 분석 · 출처 추적 · 실시간 평가
         </span>
       </div>
     </footer>

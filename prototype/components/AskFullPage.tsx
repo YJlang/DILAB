@@ -354,14 +354,14 @@ function TurnView({ turn }: { turn: Turn }) {
 
           <div className="flex items-center gap-1.5 text-xs text-muted">
             <Library size={13} strokeWidth={2} aria-hidden /> 전문가{" "}
-            {turn.expert_count ?? 0}건 · 일반 {turn.public_count ?? 0}건 ·{" "}
-            {turn.llm_model} · {turn.latency_ms}ms
+            {turn.expert_count ?? 0}건 · 일반 {turn.public_count ?? 0}건 · 생성형
+            AI
           </div>
 
           {turn.citations && turn.citations.length > 0 && (
             <details className="text-xs">
               <summary className="flex items-center gap-1.5 cursor-pointer text-ink-soft hover:text-brand font-medium">
-                <BookOpen size={13} strokeWidth={2} aria-hidden /> 출처 청크{" "}
+                <BookOpen size={13} strokeWidth={2} aria-hidden /> 출처 근거{" "}
                 {turn.citations.length}개 펼쳐 보기
               </summary>
               <div className="mt-2 space-y-1.5">
@@ -378,7 +378,7 @@ function TurnView({ turn }: { turn: Turn }) {
                             : "text-accent"
                         }`}
                       >
-                        [{c.rank}] {c.cite_type}
+                        [{c.rank}] {c.cite_type === "expert" ? "전문가" : "일반"}
                       </span>{" "}
                       <span className="text-muted">
                         sim={c.similarity.toFixed(3)} · {c.author}

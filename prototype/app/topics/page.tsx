@@ -24,20 +24,20 @@ export default async function TopicsPage({
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <header className="border-b border-line pb-4 mb-5">
         <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
-          <Layers size={14} strokeWidth={2} aria-hidden /> 토픽 탐색 (BERTopic)
+          <Layers size={14} strokeWidth={2} aria-hidden /> 토픽 탐색
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-ink">
-          화장품 — {topics.length}개 토픽 클러스터
+          화장품 — {topics.length}개 주제 그룹
         </h1>
         <p className="text-sm text-muted mt-1">
-          BGE-M3 임베딩 → UMAP 차원 축소 → HDBSCAN 클러스터링. 총 {total} chunks
-          분류됨.
+          AI가 의미 단위로 분석해 비슷한 주제끼리 자동으로 묶어요. 총 {total}건의
+          근거 분류됨.
         </p>
       </header>
 
       {topics.length === 0 ? (
         <div className="bg-card rounded-xl border border-line p-8 text-center text-muted text-sm">
-          토픽이 아직 분리되지 않았어요. 제품을 더 분석하면 자동으로 클러스터가
+          토픽이 아직 분리되지 않았어요. 제품을 더 분석하면 자동으로 주제 그룹이
           만들어져요.
         </div>
       ) : (
@@ -49,7 +49,7 @@ export default async function TopicsPage({
       )}
 
       <footer className="mt-6 text-xs text-muted">
-        BGE-M3 임베딩 → UMAP 차원 축소 → HDBSCAN 클러스터링. 청크 수가 적으면
+        AI가 의미 단위로 분석해 비슷한 주제끼리 자동으로 묶어요. 근거 수가 적으면
         토픽이 작거나 불완전할 수 있어요. 제품을 더 추가 분석할수록 더 세분화돼요.
       </footer>
     </main>
@@ -130,7 +130,7 @@ function TopicCard({
       {/* 대표 청크 */}
       <div className="space-y-1.5 mt-3">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-muted">
-          <BookOpen size={13} strokeWidth={2} aria-hidden /> 대표 청크 (상위{" "}
+          <BookOpen size={13} strokeWidth={2} aria-hidden /> 대표 근거 (상위{" "}
           {Math.min(t.chunks.length, 5)}개)
         </div>
         {t.chunks.slice(0, 5).map((c) => (
